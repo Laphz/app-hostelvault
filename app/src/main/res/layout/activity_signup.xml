@@ -28,10 +28,10 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
-                android:layout_height="43dp"
+                android:layout_height="39dp"
                 android:layout_marginBottom="15dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="@string/sign_up"
+                android:text="@string/register"
                 android:textAllCaps="true"
                 android:textColor="@color/lavender"
                 android:textSize="36sp" />
@@ -78,6 +78,74 @@
                     android:textSize="15sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Phone Num Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColorHint="@color/hint"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_phn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="emailAddress"
+                    android:fontFamily="@font/poppins"
+                    android:hint="@string/phnnum"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grey"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <!-- Hostel name Input -->
+
+
+            <Spinner
+                android:id="@+id/et_hostelname"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="6dp"
+                android:layout_height="50dp"
+                android:background="@drawable/boarder"
+                android:autofillHints="emailAddress"
+                android:fontFamily="@font/poppins"
+                android:hint="@string/hostel_name"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="15sp" />
+
+
+
+
+            <!-- Email Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColorHint="@color/hint"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_roomnum"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="emailAddress"
+                    android:fontFamily="@font/poppins"
+                    android:hint="@string/room_num"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grey"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
@@ -133,7 +201,7 @@
                 android:layout_height="55dp"
                 android:background="@drawable/btn_bg"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="@string/sign_up"
+                android:text="@string/register"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
@@ -146,21 +214,8 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/already_signed_up"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/redirectToLogin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/sign_in"
-                    android:textColor="@color/lavender"
-                    android:textSize="14sp" />
+
 
             </LinearLayout>
 

@@ -35,6 +35,7 @@ public class signupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getSupportActionBar().setTitle("Register");
 
         editTextName = findViewById(R.id.et_name);
         editTextEmail = findViewById(R.id.et_email);
@@ -54,6 +55,8 @@ public class signupActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void registerUser() {
         String name = editTextName.getText().toString().trim();
