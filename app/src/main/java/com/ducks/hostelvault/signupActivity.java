@@ -1,10 +1,13 @@
 package com.ducks.hostelvault;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -16,7 +19,10 @@ import com.ducks.hostelvault.loginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+
 
 public class signupActivity extends AppCompatActivity {
 
@@ -25,7 +31,6 @@ public class signupActivity extends AppCompatActivity {
     private FirebaseHelper firebaseHelper;
     private inputValidator inputValidator;
     private HelperClass helperClass;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +66,7 @@ public class signupActivity extends AppCompatActivity {
         if (!inputValidator.validateInputs(name, email, password, confirmPassword, inputFields)) {
             return;
         }
-
         progressBar.setVisibility(View.VISIBLE);
-
         firebaseHelper.signUpUser(email, password, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -76,28 +79,24 @@ public class signupActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 firebaseHelper.sendEmailVerification(firebaseUser);
-                                firebaseHelper.signOutUser();
-                                while (!firebaseUser.isEmailVerified()){
-                                    helperClass.showAlertEmailVerification(signupActivity.this);
-                                    Toast.makeText(signupActivity.this, "Registration successful! Please check your email to verify your account.", Toast.LENGTH_LONG).show();
-                                }
+                                Toast.makeText(signupActivity.this,
+                                        "Registration successful! Please verify your email before logging in.",
+                                        Toast.LENGTH_LONG).show();
+//                                firebaseHelper.signOutUser(); // Sign out immediately
                                 progressBar.setVisibility(View.GONE);
-                                startActivity(new Intent(signupActivity.this, loginActivity.class));
+
+                                helperClass.startFreshActivity(signupActivity.this, verifyEmailActivity.class);
                             } else {
-                                showErrorToast("Failed to save user data!");
+                                helperClass.showErrorToast(signupActivity.this,"Failed to save user data!");
                                 progressBar.setVisibility(View.GONE);
                             }
                         }
                     });
                 } else {
-                    showErrorToast(task.getException().getMessage());
+                    helperClass.showErrorToast(signupActivity.this,task.getException().getMessage());
                     progressBar.setVisibility(View.GONE);
                 }
             }
         });
-    }
-
-    private void showErrorToast(String message) {
-        Toast.makeText(signupActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }

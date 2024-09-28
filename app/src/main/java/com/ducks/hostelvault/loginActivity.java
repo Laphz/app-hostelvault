@@ -33,13 +33,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class loginActivity extends AppCompatActivity {
 
-    EditText editTextemail, editTextpassword;
-    TextView redirectToSignUp, forgotPwd;
-    Button login;
-    CheckBox rememberMe;
-    Boolean flag = false;
-    ProgressBar progressBar;
+    private EditText editTextemail, editTextpassword;
+    private TextView redirectToSignUp, forgotPwd;
+    private Button login;
+    private CheckBox rememberMe;
+    private Boolean flag = false;
+    private ProgressBar progressBar;
     private ClassNotFoundException task;
+    private FirebaseHelper firebaseHelper;
+    private HelperClass helperClass;
 
 
     @Override
@@ -55,6 +57,10 @@ public class loginActivity extends AppCompatActivity {
         login = findViewById(R.id.button);
         progressBar = findViewById(R.id.progressbarSignin);
         rememberMe = findViewById(R.id.rememberME);
+
+        // helper classes
+        firebaseHelper = new FirebaseHelper();
+        helperClass = new HelperClass();
 
         lauchLogin();
         forgotPwd();
@@ -78,7 +84,6 @@ public class loginActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-
 
 
     }
@@ -129,20 +134,20 @@ public class loginActivity extends AppCompatActivity {
     private Boolean checkloginfields(EditText[] editTextArray) {
         for (EditText value : editTextArray)
             if (TextUtils.isEmpty(value.getText().toString())) {
-                customToast("Field is required.");
+                helperClass.customToast(loginActivity.this,"Field is required.");
                 value.setError("Field is required.");
                 value.requestFocus();
                 return false;
             }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(editTextemail.getText().toString()).matches()) {
-            customToast("Invalid Email.");
+            helperClass.customToast(loginActivity.this,"Invalid Email.");
             editTextemail.setError("Enter valid email.");
             editTextemail.requestFocus();
             return false;
         }
         if ((editTextpassword.getText().toString()).length() < 6) {
-            customToast("Enter valid password contains atleast 6 characters.");
+            helperClass.customToast(loginActivity.this,"Enter valid password contains atleast 6 characters.");
             editTextpassword.setError("Password contains atleast 6 characters.");
             editTextpassword.requestFocus();
             return false;
@@ -175,18 +180,18 @@ public class loginActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             String username = task.getResult().getValue(String.class);
-                                            customToast("Logged in successfully!!\n Welcome " + username + " \uD83D\uDE03");
+                                            helperClass.customToast(loginActivity.this,"Logged in successfully!!\n Welcome " + username + " \uD83D\uDE03");
                                             startNewActivity(loginActivity.this,homeActivity.class);
                                         } else {
-                                            customToast("Something went wrong \uD83E\uDD7A");
+                                            helperClass.customToast(loginActivity.this,"Something went wrong \uD83E\uDD7A");
                                         }
                                     }
                                 });
                     } else {
-                        customToast("Email is not verified.");
+                        helperClass.customToast(loginActivity.this,"Email is not verified.");
                         auth.signOut();
                         progressBar.setVisibility(View.INVISIBLE);
-                        showAlertbox();
+                        startNewActivity(loginActivity.this, verifyEmailActivity.class);
                     }
                 } else {
                     Exception exception = task.getException();
@@ -242,29 +247,26 @@ public class loginActivity extends AppCompatActivity {
 
         if (e instanceof FirebaseAuthInvalidUserException) {
             // Handle invalid user and non-registered email together
-            customToast("This email is not registered or the user doesn't exist. Please sign up.");
+            helperClass.customToast(loginActivity.this,"This email is not registered or the user doesn't exist. Please sign up.");
         }
         else if (e instanceof FirebaseAuthInvalidCredentialsException) {
             // Handle incorrect password or email
-            customToast("Invalid credentials. Please check your email and password.");
+            helperClass.customToast(loginActivity.this,"Invalid credentials. Please check your email and password.");
         }
         else if (e instanceof FirebaseAuthUserCollisionException) {
-            customToast("This email is already registered. Try logging in.");
+            helperClass.customToast(loginActivity.this,"This email is already registered. Try logging in.");
         }
         else if (e instanceof FirebaseNetworkException) {
             // Handle network error
-            customToast("Network error. Please check your connection.");
+            helperClass.customToast(loginActivity.this,"Network error. Please check your connection.");
         }
         else {
             // General error
-            customToast("Something went wrong. Please try again later.");
+            helperClass.customToast(loginActivity.this,"Something went wrong. Please try again later.");
         }
     }
 
-    // custom toast function
-    private void customToast(String message) {
-        Toast.makeText(loginActivity.this, message, Toast.LENGTH_LONG).show();
-    }
+
 
     // check if user is already logged in if not then start the activity
 

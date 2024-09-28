@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Hostelvault"
         tools:targetApi="31">
         <activity
+            android:name=".verifyEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".launchActivity"
             android:exported="true">
             <intent-filter>
@@ -44,8 +47,7 @@
             android:exported="false" />
         <activity
             android:name=".loginActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".signupActivity"
             android:exported="false" />
