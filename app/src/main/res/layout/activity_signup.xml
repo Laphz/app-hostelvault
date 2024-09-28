@@ -112,6 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="6dp"
+                android:entries="@array/spinner_items"
                 android:layout_height="50dp"
                 android:background="@drawable/boarder"
                 android:autofillHints="emailAddress"

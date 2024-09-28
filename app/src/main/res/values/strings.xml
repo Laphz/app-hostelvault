@@ -36,5 +36,11 @@
     <string name="about_us">About Us</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string-array name="spinner_items">
+        <item>Hostel 1</item>
+        <item>Hostel 2</item>
+    </string-array>
+
+
 
 </resources>
