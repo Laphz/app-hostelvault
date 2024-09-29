@@ -3,8 +3,9 @@
     <style name="Base.Theme.Tutorial" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-        <item name="colorPrimary">@color/transparent</item>
         <item name="android:statusBarColor">@color/bg_color</item>
-        <item name="colorPrimaryVariant">@color/transparent</item>
+<!--        <item name="colorPrimary">@color/transparent</item>-->
+<!--        <item name="colorPrimaryVariant">@color/transparent</item>-->
+        <item name="backgroundTint">@null</item>
     </style>
 </resources>
