@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="642dp"
             android:background="@drawable/boarder"
             android:gravity="center"
             android:orientation="vertical"
@@ -103,26 +103,23 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
             <!-- Hostel name Input -->
 
 
             <Spinner
                 android:id="@+id/et_hostelname"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="6dp"
-                android:entries="@array/spinner_items"
                 android:layout_height="50dp"
-                android:background="@drawable/boarder"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="2dp"
                 android:autofillHints="emailAddress"
+                android:background="@drawable/boarder"
+                android:entries="@array/spinner_items"
                 android:fontFamily="@font/poppins"
                 android:hint="@string/hostel_name"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey"
                 android:textSize="15sp" />
-
-
 
 
             <!-- Email Input -->
@@ -198,27 +195,16 @@
             <!-- Sign Up Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signup_btn"
+                style="@style/Theme.Hostelvault"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:background="@drawable/btn_bg"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/register"
                 android:textAllCaps="true"
-                android:textColor="@color/white"
+                android:textColor="@color/lavender"
                 android:textSize="24sp" />
 
-            <!-- Already Signed Up? Sign In Text -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-
-
-
-            </LinearLayout>
 
         </LinearLayout>
 
