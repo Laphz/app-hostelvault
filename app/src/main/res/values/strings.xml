@@ -37,8 +37,8 @@
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string-array name="spinner_items">
-        <item>Hostel 1</item>
-        <item>Hostel 2</item>
+        <item>HV002-Daya Shree Boys</item>
+        <item>DBH2</item>
     </string-array>
 
 
