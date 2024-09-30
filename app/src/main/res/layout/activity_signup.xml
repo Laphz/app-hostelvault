@@ -1,10 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/appbg"
+    android:gravity="center"
     tools:context=".signupActivity">
 
     <!-- CardView containing the form -->
@@ -18,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="642dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/boarder"
             android:gravity="center"
             android:orientation="vertical"
@@ -28,8 +29,8 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
-                android:layout_height="39dp"
-                android:layout_marginBottom="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/register"
                 android:textAllCaps="true"
@@ -95,49 +96,7 @@
                     android:layout_height="match_parent"
                     android:autofillHints="emailAddress"
                     android:fontFamily="@font/poppins"
-                    android:hint="@string/phnnum"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/grey"
-                    android:textSize="15sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- Hostel name Input -->
-
-
-            <Spinner
-                android:id="@+id/et_hostelname"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="2dp"
-                android:autofillHints="emailAddress"
-                android:background="@drawable/boarder"
-                android:entries="@array/spinner_items"
-                android:fontFamily="@font/poppins"
-                android:hint="@string/hostel_name"
-                android:textColor="@color/white"
-                android:textColorHint="@color/grey"
-                android:textSize="15sp" />
-
-
-            <!-- Email Input -->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColorHint="@color/hint"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_roomnum"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autofillHints="emailAddress"
-                    android:fontFamily="@font/poppins"
-                    android:hint="@string/room_num"
+                    android:hint="@string/phone_number"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grey"
                     android:textSize="15sp" />
@@ -181,7 +140,6 @@
                     android:id="@+id/et_confpasswrd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="30dp"
                     android:autofillHints="password"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/confirm_password"
@@ -198,6 +156,7 @@
                 style="@style/Theme.Hostelvault"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/btn_bg"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/register"
@@ -221,4 +180,4 @@
         android:visibility="gone" />
 
 
-</RelativeLayout>
+</LinearLayout>
