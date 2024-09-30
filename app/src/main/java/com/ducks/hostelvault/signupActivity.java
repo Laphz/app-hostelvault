@@ -64,9 +64,6 @@ public class signupActivity extends AppCompatActivity {
 
         String hostelcode = hostelName.split("-")[0];
 
-        // Define sub-room number, you may want to create this based on your logic
-        String subRoomNumber = "1"; // Change this based on your app logic
-
         EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone, editTextRoomNum};
 
         if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, roomNum, hostelName, inputFields)) {
@@ -78,9 +75,11 @@ public class signupActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = firebaseHelper.getCurrentUser();
+                    String uid = firebaseUser.getUid();
                     user user = new user(name, email, phoneNum);
 
                     // Store user data in the specified room and sub-room
+                    firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelcode);
 
 
                 } else {
