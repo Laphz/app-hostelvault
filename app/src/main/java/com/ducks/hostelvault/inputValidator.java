@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class inputValidator {
 
-    public boolean validateInputs(String email, String password, String confirmPassword, String phoneNum, String roomNum,String hostelName,  EditText[] inputFields) {
+    public boolean validateInputs(String email, String password, String confirmPassword, String phoneNum,  EditText[] inputFields) {
         int count = 0;
 
         // valid mobile num
