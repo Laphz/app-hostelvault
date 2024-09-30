@@ -1,47 +1,44 @@
 package com.ducks.hostelvault;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ducks.hostelvault.FirebaseHelper;
-import com.ducks.hostelvault.loginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
-
 public class signupActivity extends AppCompatActivity {
 
-    private EditText editTextName, editTextEmail, editTextPassword, editTextConfirmPassword;
+    private EditText editTextName, editTextEmail, editTextPhone, editTextRoomNum, editTextPassword, editTextConfirmPassword;
+    private Spinner editTextHostelName;
     private ProgressBar progressBar;
     private FirebaseHelper firebaseHelper;
     private inputValidator inputValidator;
     private HelperClass helperClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        getSupportActionBar().setTitle("Register");
 
         editTextName = findViewById(R.id.et_name);
         editTextEmail = findViewById(R.id.et_email);
         editTextPassword = findViewById(R.id.et_passwrd);
         editTextConfirmPassword = findViewById(R.id.et_confpasswrd);
         progressBar = findViewById(R.id.progressbar);
+        editTextPhone = findViewById(R.id.et_phn);
+        editTextRoomNum = findViewById(R.id.et_roomnum);
+        editTextHostelName = findViewById(R.id.et_hostelname);
 
         firebaseHelper = new FirebaseHelper();
         inputValidator = new inputValidator();
@@ -56,17 +53,23 @@ public class signupActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void registerUser() {
         String name = editTextName.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
+        String phoneNum = editTextPhone.getText().toString();
+        String roomNum = editTextRoomNum.getText().toString();
+        String hostelName = editTextHostelName.getSelectedItem().toString();
 
-        EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword};
+        String hostelcode = hostelName.split("-")[0];
 
-        if (!inputValidator.validateInputs(name, email, password, confirmPassword, inputFields)) {
+        // Define sub-room number, you may want to create this based on your logic
+        String subRoomNumber = "1"; // Change this based on your app logic
+
+        EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone, editTextRoomNum};
+
+        if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, roomNum, hostelName, inputFields)) {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
@@ -75,28 +78,13 @@ public class signupActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = firebaseHelper.getCurrentUser();
-                    user user = new user(name, email);
+                    user user = new user(name, email, phoneNum);
 
-                    firebaseHelper.storeUserData(firebaseUser.getUid(), user, new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                firebaseHelper.sendEmailVerification(firebaseUser);
-                                Toast.makeText(signupActivity.this,
-                                        "Registration successful! Please verify your email before logging in.",
-                                        Toast.LENGTH_LONG).show();
-//                                firebaseHelper.signOutUser(); // Sign out immediately
-                                progressBar.setVisibility(View.GONE);
+                    // Store user data in the specified room and sub-room
 
-                                helperClass.startFreshActivity(signupActivity.this, verifyEmailActivity.class);
-                            } else {
-                                helperClass.showErrorToast(signupActivity.this,"Failed to save user data!");
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }
-                    });
+
                 } else {
-                    helperClass.showErrorToast(signupActivity.this,task.getException().getMessage());
+                    helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
                     progressBar.setVisibility(View.GONE);
                 }
             }

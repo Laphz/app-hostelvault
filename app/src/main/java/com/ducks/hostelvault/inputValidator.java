@@ -1,20 +1,43 @@
 package com.ducks.hostelvault;
 
+import android.health.connect.datatypes.units.Length;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.EditText;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class inputValidator {
 
-    public boolean validateInputs(String name, String email, String password, String confirmPassword, EditText[] inputFields) {
-        if (TextUtils.isEmpty(name)) {
-            showError(inputFields[0], "Full name is required!");
+    public boolean validateInputs(String email, String password, String confirmPassword, String phoneNum, String roomNum,String hostelName,  EditText[] inputFields) {
+        int count = 0;
+
+        // valid mobile num
+        String mobileRegex = "[6-9][0-9]{9}";  // first num should be in range [6,9] and other 9 can be [0,9]
+        Matcher mobileMatcher;
+        Pattern mobilePattern = Pattern.compile(mobileRegex);
+        mobileMatcher = mobilePattern.matcher(phoneNum);
+
+
+        for(EditText value : inputFields){
+            if (TextUtils.isEmpty(value.getText().toString())) {
+                showError(inputFields[count], "Required Field!");
+                return false;
+            }
+            count++;
+        }
+
+        if(phoneNum.length() != 10){
+            showError(inputFields[4], "Length of should 10!");
             return false;
         }
-        if (TextUtils.isEmpty(email)) {
-            showError(inputFields[1], "Email is required!");
+
+        if(!mobileMatcher.find()){
+            showError(inputFields[4], "Please enter valid Mobile Number");
             return false;
         }
+
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             showError(inputFields[1], "Please provide a valid Email.");
             return false;
@@ -35,6 +58,8 @@ public class inputValidator {
             showError(inputFields[3], "Passwords do not match!");
             return false;
         }
+
+
         return true;
     }
 
