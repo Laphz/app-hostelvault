@@ -65,55 +65,69 @@ public class FirebaseHelper {
         }
     }
 
-    // Fetch all hostels from FireStore
-    public void fetchHostel(OnCompleteListener<List<String>> listener) {
-        List<String> hostellist = new ArrayList<>();
-        firestore.collection("hostels")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot docx : task.getResult()) {
-                            String hostelCode = docx.getString("hostel_code");
-                            String hostelName = docx.getString("name");
-                            hostellist.add(hostelCode + "-" + hostelName);
-                        }
-                        listener.onComplete((Task<List<String>>) hostellist);
-                    } else {
-                        listener.onComplete(null);
-                    }
-                });
-    }
-
-    // Fetch hostel ID by hostel code
-    public void fetchHostelIdByCode(String hostelCode, final OnHostelCodeFetchedListener listener) {
-        firestore.collection("hostels")
-                .whereEqualTo("hostel_code", hostelCode)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        String hostelId = task.getResult().getDocuments().get(0).getId();
-                        listener.onHostelCodeFetched(hostelId); // Return the hostelId directly
-                    } else {
-                        listener.onHostelCodeFetched(null); // Return null if no hostelId is found
-                    }
-                })
-                .addOnFailureListener(e -> Log.e(TAG, "Failed to fetch hostel ID: ", e));
-    }
-
     // store the data
-    public void storeData(String name, String email, String mobile, String hostel_id){
+    public void storeData(String uid, String name, String email, String mobileNumber, String hostelCode) {
+        // Get Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        CollectionReference hostelRef = db.collection("hostels");
-        hostelRef.whereEqualTo("hoste_id", hostel_id).get()
+        // Firestore reference to the 'hostels' collection to get rooms by hostel code
+        CollectionReference hostelsRef = db.collection("hostels");
+
+        // Query to find the hostel by its code
+        hostelsRef.whereEqualTo("hostel_id", hostelCode).get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() & !task.getResult().isEmpty()) {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        // Assume only one hostel matches this code
                         DocumentSnapshot hostelSnapshot = task.getResult().getDocuments().get(0);
                         String hostelId = hostelSnapshot.getId();
-                        Map<String, Objects> rooms = (Map<String, Objects>) hostelSnapshot.get("rooms");
+
+                        // Get the rooms map from the hostel document
+                        Map<String, Object> rooms = (Map<String, Object>) hostelSnapshot.get("rooms");
+
+                        if (rooms != null && !rooms.isEmpty()) {
+                            // Find the first available room or use a specific room number logic
+                            String roomid = null;
+
+                            // Iterate through the rooms map
+                            for (String roomNumber : rooms.keySet()) {
+                                Map<String, Object> subRooms = (Map<String, Object>) rooms.get(roomNumber);
+
+                                // Check if there is available sub-room in the room map
+                                if (subRooms != null && subRooms.size() < 3) { // Assuming 3 sub-rooms per room
+                                    roomid = roomNumber;
+                                    break;
+                                }
+                            }
+
+                            if (roomid != null) {
+                                // Prepare user data to store in Firestore
+                                Map<String, Object> userData = new HashMap<>();
+                                userData.put("name", name);
+                                userData.put("email", email);
+                                userData.put("mobileNumber", mobileNumber);
+                                userData.put("hostel_code", hostelCode);
+                                userData.put("roomid", roomid);  // Store the room ID in Firestore
+
+                                // Firestore reference to the 'users' collection
+                                DocumentReference userRef = db.collection("users").document(uid);
+
+                                // Store user data in Firestore
+                                userRef.set(userData)
+                                        .addOnSuccessListener(aVoid -> Log.d("Firestore", "User data stored successfully."))
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error storing user data: ", e));
+                            } else {
+                                Log.e("Firestore", "No available room found.");
+                            }
+                        } else {
+                            Log.e("Firestore", "No rooms available in the hostel.");
+                        }
+                    } else {
+                        Log.e("Firestore", "Hostel not found with the given hostel code.");
                     }
-                });
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error finding hostel: ", e));
     }
+
 
     // Sign out the user
     public void signOutUser() {

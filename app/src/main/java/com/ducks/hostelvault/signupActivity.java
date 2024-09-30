@@ -81,16 +81,8 @@ public class signupActivity extends AppCompatActivity {
                     user user = new user(name, email, phoneNum);
 
                     // Store user data in the specified room and sub-room
-                    firebaseHelper.storeUserDataInRoom(hostelcode, roomNum, subRoomNumber, user, task1 -> {
-                        if (task1.isSuccessful()) {
-                            firebaseHelper.sendEmailVerification(firebaseUser);
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(signupActivity.this, "Sign-up successful! Verification email sent.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            helperClass.showErrorToast(signupActivity.this, task1.getException().getMessage());
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
+
+
                 } else {
                     helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
                     progressBar.setVisibility(View.GONE);
