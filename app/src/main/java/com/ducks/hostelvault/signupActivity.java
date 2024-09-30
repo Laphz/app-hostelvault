@@ -79,8 +79,19 @@ public class signupActivity extends AppCompatActivity {
                     String uid = firebaseUser.getUid();
                     user user = new user(name, email, phoneNum);
 
-                    // Store user data in the specified room and sub-room
-                    firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelId,roomNum);
+                    //send email verification link
+                    firebaseHelper.sendEmailVerification(firebaseUser);
+                    // check email verfication
+                    if(firebaseUser.isEmailVerified()){
+                        // Store user data in the specified room and sub-room
+                        firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelId,roomNum);
+                    }
+                    else {
+                        // email verification
+                        helperClass.showAlertEmailVerification(signupActivity.this);
+                    }
+
+
 
 
                 } else {
