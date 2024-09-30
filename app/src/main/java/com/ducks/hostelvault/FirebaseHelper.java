@@ -65,69 +65,18 @@ public class FirebaseHelper {
         }
     }
 
-    // store the data
-    public void storeData(String uid, String name, String email, String mobileNumber, String hostelCode) {
-        // Get Firestore instance
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    // Store Hosteler data
+    public void storeHostelerData(String hostelerId, String name, String email, String hostelId, String roomId) {
+        Map<String, Object> hostelerData = new HashMap<>();
+        hostelerData.put("name", name);
+        hostelerData.put("email", email);
+        hostelerData.put("hostel_id", hostelId);
+        hostelerData.put("room_id", roomId);
 
-        // Firestore reference to the 'hostels' collection to get rooms by hostel code
-        CollectionReference hostelsRef = db.collection("hostels");
-
-        // Query to find the hostel by its code
-        hostelsRef.whereEqualTo("hostel_id", hostelCode).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        // Assume only one hostel matches this code
-                        DocumentSnapshot hostelSnapshot = task.getResult().getDocuments().get(0);
-                        String hostelId = hostelSnapshot.getId();
-
-                        // Get the rooms map from the hostel document
-                        Map<String, Object> rooms = (Map<String, Object>) hostelSnapshot.get("rooms");
-
-                        if (rooms != null && !rooms.isEmpty()) {
-                            // Find the first available room or use a specific room number logic
-                            String roomid = null;
-
-                            // Iterate through the rooms map
-                            for (String roomNumber : rooms.keySet()) {
-                                Map<String, Object> subRooms = (Map<String, Object>) rooms.get(roomNumber);
-
-                                // Check if there is available sub-room in the room map
-                                if (subRooms != null && subRooms.size() < 3) { // Assuming 3 sub-rooms per room
-                                    roomid = roomNumber;
-                                    break;
-                                }
-                            }
-
-                            if (roomid != null) {
-                                // Prepare user data to store in Firestore
-                                Map<String, Object> userData = new HashMap<>();
-                                userData.put("name", name);
-                                userData.put("email", email);
-                                userData.put("mobileNumber", mobileNumber);
-                                userData.put("hostel_code", hostelCode);
-                                userData.put("roomid", roomid);  // Store the room ID in Firestore
-
-                                // Firestore reference to the 'users' collection
-                                DocumentReference userRef = db.collection("users").document(uid);
-
-                                // Store user data in Firestore
-                                userRef.set(userData)
-                                        .addOnSuccessListener(aVoid -> Log.d("Firestore", "User data stored successfully."))
-                                        .addOnFailureListener(e -> Log.e("Firestore", "Error storing user data: ", e));
-                            } else {
-                                Log.e("Firestore", "No available room found.");
-                            }
-                        } else {
-                            Log.e("Firestore", "No rooms available in the hostel.");
-                        }
-                    } else {
-                        Log.e("Firestore", "Hostel not found with the given hostel code.");
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error finding hostel: ", e));
+        db.collection("hostelers").document(hostelerId).set(hostelerData)
+                .addOnSuccessListener(aVoid -> Log.d("FirebaseHelper", "Hosteler data successfully written!"))
+                .addOnFailureListener(e -> Log.e("FirebaseHelper", "Error writing hosteler data", e));
     }
-
 
     // Sign out the user
     public void signOutUser() {

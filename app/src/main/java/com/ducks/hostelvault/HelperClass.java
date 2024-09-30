@@ -70,6 +70,4 @@ public class HelperClass {
     public void showErrorToast(Context currentActivity,String message) {
         Toast.makeText(currentActivity, message, Toast.LENGTH_LONG).show();
     }
-
-
 }
