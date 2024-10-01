@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_bg_gradient"
+    android:padding="30dp"
     android:gravity="center"
     tools:context=".signupActivity">
 
     <!-- CardView containing the form -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:cardCornerRadius="15dp"
@@ -98,7 +99,7 @@
                     android:id="@+id/et_phn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:autofillHints="emailAddress"
+                    android:autofillHints="phone"
                     android:inputType="phone"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/phone_number"
@@ -122,7 +123,6 @@
                     android:id="@+id/et_hostel_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:autofillHints="emailAddress"
                     android:fontFamily="@font/poppins"
                     android:hint="Hostel Id"
                     android:textColor="@color/white"
@@ -146,8 +146,8 @@
                     android:id="@+id/et_room_num"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:autofillHints="emailAddress"
                     android:fontFamily="@font/poppins"
+                    android:inputType="number"
                     android:hint="Room Number"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grey"
