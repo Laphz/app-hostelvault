@@ -143,7 +143,6 @@
                 android:layout_marginTop="17dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_bg"
-                android:backgroundTint="@null"
                 android:fontFamily="@font/poppins_semibold"
                 android:gravity="center"
                 android:text="@string/sign_in"
