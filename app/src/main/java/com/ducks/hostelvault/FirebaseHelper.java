@@ -73,7 +73,7 @@ public class FirebaseHelper {
         hostelerData.put("hostel_id", hostelId);
         hostelerData.put("room_id", roomId);
 
-        db.collection("hostelers").document(hostelerId).set(hostelerData)
+        firestore.collection("hostelers").document(hostelerId).set(hostelerData)
                 .addOnSuccessListener(aVoid -> Log.d("FirebaseHelper", "Hosteler data successfully written!"))
                 .addOnFailureListener(e -> Log.e("FirebaseHelper", "Error writing hosteler data", e));
     }

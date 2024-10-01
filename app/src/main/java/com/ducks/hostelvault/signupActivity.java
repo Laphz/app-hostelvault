@@ -37,8 +37,8 @@ public class signupActivity extends AppCompatActivity {
         editTextConfirmPassword = findViewById(R.id.et_confpasswrd);
         progressBar = findViewById(R.id.progressbar);
         editTextPhone = findViewById(R.id.et_phn);
-        editTextRoomNum = findViewById(R.id.et_roomnum);
-        editTextHostelName = findViewById(R.id.et_hostelname);
+//        editTextRoomNum = findViewById(R.id.et_roomnum);
+//        editTextHostelName = findViewById(R.id.et_hostelname);
 
         firebaseHelper = new FirebaseHelper();
         inputValidator = new inputValidator();

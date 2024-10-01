@@ -4,18 +4,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/appbg"
+    android:background="@drawable/hoomepage"
     android:gravity="center"
     tools:context=".signupActivity">
 
     <!-- CardView containing the form -->
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:cardCornerRadius="15dp"
-        app:cardElevation="20dp">
+        app:cardElevation="20dp"
+        app:strokeWidth="0dp"
+        android:background="@drawable/boarder"
+        app:cardBackgroundColor="@android:color/transparent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/hint"
+                app:passwordToggleTint="@color/white"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -134,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/hint"
+                app:passwordToggleTint="@color/white"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -167,7 +173,7 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- ProgressBar positioned below the CardView -->
     <ProgressBar
