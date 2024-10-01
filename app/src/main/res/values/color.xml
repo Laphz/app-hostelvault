@@ -31,7 +31,7 @@
     <color name="btn_color_bottom">#6440F8</color>
     <color name="et_border_color">#938FED</color>
     <color name="grey">#3A393D</color>
-    <color name="hint">#3D3D59</color>
+    <color name="hint">#646490</color>
     <color name="remme">#4F4FA5</color>
     <color name="transparent">#004F4FA5</color>
     <color name="drawer_scrim">#80000000</color> <!-- 50% opaque black -->
