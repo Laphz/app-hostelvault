@@ -19,3 +19,33 @@
         </shape>
     </item>
 </layer-list>
+
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    &lt;!&ndash; Background color &ndash;&gt;-->
+<!--    <item>-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="#66FFFFFF" /> &lt;!&ndash; Semi-transparent white &ndash;&gt;-->
+<!--            <corners android:radius="16dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+
+<!--    &lt;!&ndash; Border &ndash;&gt;-->
+<!--    <item>-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="@android:color/transparent" />-->
+<!--            <stroke android:width="2dp" android:color="#80FFFFFF" /> &lt;!&ndash; Semi-transparent white border &ndash;&gt;-->
+<!--            <corners android:radius="16dp" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--</layer-list>-->
+
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item>-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="#33FFFFFF"/> &lt;!&ndash; Semi-transparent white &ndash;&gt;-->
+<!--            <corners android:radius="16dp"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--</layer-list>-->
+
+

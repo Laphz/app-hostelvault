@@ -44,6 +44,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    implementation(libs.code.scanner)
 
 }
