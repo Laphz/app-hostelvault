@@ -18,30 +18,29 @@
 
     </ImageView>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/launchLogin"
         android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="17dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/btn_bg"
-        android:backgroundTint="@null"
+        android:backgroundTint="@color/lavender"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Login"
+        android:gravity="center"
+        android:text="@string/login"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="28sp">
 
-    </com.google.android.material.button.MaterialButton>
+    </Button>
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Theme.Hostelvault"
+    <Button
         android:id="@+id/launchRegister"
         android:layout_width="370dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="center"
         android:background="@drawable/btn_bg_transparent"
         android:fontFamily="@font/poppins_semibold"
+        android:gravity="center"
         android:text="@string/register"
         android:textAllCaps="true"
         android:textColor="@color/lavender"
