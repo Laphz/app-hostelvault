@@ -29,6 +29,7 @@ public class FirebaseHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private static final String TAG = "FirebaseHelper";
+    private String roomId;
 
     public FirebaseHelper() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -90,6 +91,15 @@ public class FirebaseHelper {
                                     Map<String, Object> roomInfo = (Map<String, Object>) rooms.get(roomNum);
                                     if (roomInfo != null) {
                                         // Return the size of the room map
+                                        roomId = roomNum + "." + (roomInfo.size() + 1);
+                                        roomInfo.put(roomId ,hostelerId);
+
+                                        db.collection("hostels").document(hostelId).update("rooms", rooms)
+                                                .addOnSuccessListener(aVoid -> callback.onCallback(0)) // Successfully added, return 0
+                                                .addOnFailureListener(e -> {
+                                                    Log.e("Firestore Update", "Error updating hostel rooms", e);
+                                                    callback.onCallback(-1); // Indicate an error occurred
+                                                });
                                         callback.onCallback(roomInfo.size());
                                     } else {
                                         // Room information is not available
@@ -98,6 +108,7 @@ public class FirebaseHelper {
                                 } else {
                                     // Room number does not exist
                                     Map<String,Object> newRoomNumber = new HashMap<>();
+                                    roomId =  roomNum + ".1";
                                     newRoomNumber.put(roomNum + ".1",hostelerId);
                                     rooms.put(roomNum,newRoomNumber);
                                     db.collection("hostels").document(hostelId).update("rooms", rooms)
@@ -130,7 +141,6 @@ public class FirebaseHelper {
             public void onCallback(Integer roomSize) {
                 if (roomSize != null) {
 
-                    String roomId = roomNum + "." + (roomSize + 1);
                     Map<String, Object> hostelerData = new HashMap<>();
                     hostelerData.put("name", name);
                     hostelerData.put("email", email);

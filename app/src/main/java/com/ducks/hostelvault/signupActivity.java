@@ -34,7 +34,6 @@ public class signupActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.et_email);
         editTextPassword = findViewById(R.id.et_passwrd);
         editTextConfirmPassword = findViewById(R.id.et_confpasswrd);
-//        progressBar = findViewById(R.id.progressbar);
         editTextPhone = findViewById(R.id.et_phn);
         editTextHostelId = findViewById(R.id.et_hostel_id);
         editTextRoomNum = findViewById(R.id.et_room_num);
@@ -70,7 +69,6 @@ public class signupActivity extends AppCompatActivity {
         if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, inputFields)) {
             return;
         }
-//        progressBar.setVisibility(View.VISIBLE);
         firebaseHelper.signUpUser(email, password, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -81,17 +79,12 @@ public class signupActivity extends AppCompatActivity {
 
                     //send email verification link
                     firebaseHelper.sendEmailVerification(firebaseUser);
-                    // check email verfication
-                    if(firebaseUser.isEmailVerified()){
-                        // Store user data in the specified room and sub-room
-                        firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelId,roomNum);
-                    }
-                    else {
-                        // email verification
-                        helperClass.showAlertEmailVerification(signupActivity.this);
-                    }
+                    
+                    // check email verification
+                    helperClass.startNewActivity(signupActivity.this,verifyEmailActivity.class);
 
-
+                    // if email is verified then only store the data
+                    firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelId,roomNum);
 
 
                 } else {
