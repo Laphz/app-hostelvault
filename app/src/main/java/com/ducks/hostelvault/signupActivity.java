@@ -19,8 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class signupActivity extends AppCompatActivity {
 
-    private EditText editTextName, editTextEmail, editTextPhone, editTextRoomNum, editTextPassword, editTextConfirmPassword;
-    private Spinner editTextHostelName;
+    private EditText editTextName, editTextEmail, editTextPhone, editTextPassword, editTextConfirmPassword,editTextHostelId,editTextRoomNum;
     private ProgressBar progressBar;
     private FirebaseHelper firebaseHelper;
     private inputValidator inputValidator;
@@ -35,10 +34,9 @@ public class signupActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.et_email);
         editTextPassword = findViewById(R.id.et_passwrd);
         editTextConfirmPassword = findViewById(R.id.et_confpasswrd);
-        progressBar = findViewById(R.id.progressbar);
         editTextPhone = findViewById(R.id.et_phn);
-//        editTextRoomNum = findViewById(R.id.et_roomnum);
-//        editTextHostelName = findViewById(R.id.et_hostelname);
+        editTextHostelId = findViewById(R.id.et_hostel_id);
+        editTextRoomNum = findViewById(R.id.et_room_num);
 
         firebaseHelper = new FirebaseHelper();
         inputValidator = new inputValidator();
@@ -58,18 +56,19 @@ public class signupActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
-        String phoneNum = editTextPhone.getText().toString();
-        String roomNum = editTextRoomNum.getText().toString();
-        String hostelName = editTextHostelName.getSelectedItem().toString();
+        String phoneNum = editTextPhone.getText().toString().trim();
+        String hostelId = editTextHostelId.getText().toString().trim();
+        String roomNum = editTextRoomNum.getText().toString().trim();
 
-        String hostelcode = hostelName.split("-")[0];
 
-        EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone, editTextRoomNum};
 
-        if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, roomNum, hostelName, inputFields)) {
+
+
+        EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone};
+
+        if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, inputFields)) {
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
         firebaseHelper.signUpUser(email, password, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -78,8 +77,14 @@ public class signupActivity extends AppCompatActivity {
                     String uid = firebaseUser.getUid();
                     user user = new user(name, email, phoneNum);
 
-                    // Store user data in the specified room and sub-room
-                    firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelcode);
+                    //send email verification link
+                    firebaseHelper.sendEmailVerification(firebaseUser);
+                    
+                    // check email verification
+                    helperClass.startNewActivity(signupActivity.this,verifyEmailActivity.class);
+
+                    // if email is verified then only store the data
+                    firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelId,roomNum);
 
 
                 } else {

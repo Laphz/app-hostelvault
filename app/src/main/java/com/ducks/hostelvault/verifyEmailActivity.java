@@ -1,6 +1,5 @@
 package com.ducks.hostelvault;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class verifyEmailActivity extends AppCompatActivity {
@@ -37,7 +35,7 @@ public class verifyEmailActivity extends AppCompatActivity {
 
         if (currentUser == null) {
             Toast.makeText(this, "No user is currently signed in.", Toast.LENGTH_SHORT).show();
-            redirectToLogin();
+            redirectToHomeActivity();
             return;
         }
 
@@ -85,7 +83,7 @@ public class verifyEmailActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if (currentUser.isEmailVerified()) {
                         Toast.makeText(verifyEmailActivity.this, "Email verified!", Toast.LENGTH_SHORT).show();
-                        redirectToLogin();
+                        redirectToHomeActivity();
                     }
                 } else {
                     // Handle failure to reload user
@@ -103,7 +101,7 @@ public class verifyEmailActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if (currentUser.isEmailVerified()) {
                         Toast.makeText(verifyEmailActivity.this, "Email verified!", Toast.LENGTH_SHORT).show();
-                        redirectToLogin();
+                        redirectToHomeActivity();
                     } else {
                         Toast.makeText(verifyEmailActivity.this, "Email not yet verified. Please check your inbox.", Toast.LENGTH_SHORT).show();
                         helperClass.openEmailApp(verifyEmailActivity.this);
@@ -138,7 +136,7 @@ public class verifyEmailActivity extends AppCompatActivity {
 //    }
 
     // Redirect to the login activity
-    private void redirectToLogin() {
+    private void redirectToHomeActivity() {
         handler.removeCallbacksAndMessages(null); // Stop email check
         helperClass.startFreshActivity(verifyEmailActivity.this, homeActivity.class);
     }
