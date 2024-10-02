@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -39,6 +40,14 @@ public class qrActivity extends AppCompatActivity {
     private static final String ADMIN_DB_PATH = "Admin";
     private static final String REGISTERED_USERS_DB_PATH = "Registered Users";
     private static final String STATUS_DB_PATH = "Status";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Configuration overrideConfiguration = new Configuration(newBase.getResources().getConfiguration());
+        overrideConfiguration.fontScale = 1.0f;  // Set fontScale to 1.0 to avoid scaling
+        Context context = newBase.createConfigurationContext(overrideConfiguration);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

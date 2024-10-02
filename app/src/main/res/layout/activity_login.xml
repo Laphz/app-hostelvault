@@ -28,8 +28,7 @@
             <TextView
                 android:id="@+id/logintv"
                 android:layout_width="wrap_content"
-                android:layout_height="43dp"
-                android:layout_marginBottom="15dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/sign_in"
                 android:textAllCaps="true"
@@ -99,45 +98,65 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="15dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+
                 android:orientation="horizontal">
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/rememberME"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginEnd="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.428">
 
                 </com.google.android.material.checkbox.MaterialCheckBox>
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="1dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:autoSizeMaxTextSize="28sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:textScaleX="1"
+                    android:fontFamily="@font/poppins"
                     android:text="@string/remember_me"
                     android:textColor="@color/white"
-                    app:layout_constraintStart_toEndOf="@+id/rememberME"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:textFontWeight="500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.135"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
 
                 </TextView>
 
                 <TextView
                     android:id="@+id/forgotpwd"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
+                    android:layout_height="25dp"
+                    android:autoSizeMaxTextSize="28sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:textScaleX="1"
+                    android:fontFamily="@font/poppins"
                     android:text="@string/forgot_password"
                     android:textColor="@color/lavender"
+                    android:textFontWeight="500"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                 </TextView>
@@ -149,9 +168,12 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="17dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="28sp"
+                android:autoSizeStepGranularity="1sp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_bg"
                 android:fontFamily="@font/poppins_semibold"
@@ -164,35 +186,56 @@
             </com.google.android.material.button.MaterialButton>
 
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginRight="10dp"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/poppins"
                     android:text="@string/not_yet_registered"
                     android:textColor="@color/white"
-                    android:textSize="14sp">
+                    android:textFontWeight="500"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.331"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
 
                 </TextView>
 
                 <TextView
                     android:id="@+id/loginIntosignup"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_height="25dp"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/poppins"
                     android:text="Sign Up"
                     android:textColor="@color/lavender"
-                    android:textSize="14sp">
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.751"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
 
                 </TextView>
 
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
