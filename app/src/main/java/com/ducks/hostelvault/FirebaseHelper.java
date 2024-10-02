@@ -1,28 +1,23 @@
 package com.ducks.hostelvault;
 
+import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.ViewStructure;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class FirebaseHelper {
 
@@ -30,6 +25,9 @@ public class FirebaseHelper {
     private FirebaseFirestore firestore;
     private static final String TAG = "FirebaseHelper";
     private String roomId;
+    private HelperClass helperClass;
+
+
 
     public FirebaseHelper() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -66,72 +64,79 @@ public class FirebaseHelper {
         }
     }
 
+
+
     // Define a callback interface
     public interface RoomSizeCallback {
         void onCallback(Integer roomSize); // Callback to handle room size
     }
 
-    // Method to check if a hostel ID and room number exist
-    public void checkHostelAndRoom(String hostelerId,String hostelId, String roomNum, RoomSizeCallback callback) {
+    public void checkHostelAndRoom(String hostelerId, String hostelId, String roomNum, RoomSizeCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Fetch the hostel document by ID
-        db.collection("hostels").document(hostelId) // Use the provided hostel ID
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                // Hostel exists
-                                Map<String, Object> rooms = (Map<String, Object>) document.get("rooms");
-                                if (rooms != null && rooms.containsKey(roomNum)) {
-                                    // Room number exists
-                                    Map<String, Object> roomInfo = (Map<String, Object>) rooms.get(roomNum);
-                                    if (roomInfo != null) {
-                                        // Return the size of the room map
-                                        roomId = roomNum + "." + (roomInfo.size() + 1);
-                                        roomInfo.put(roomId ,hostelerId);
+        // Fetch the hostel by ID
+        fetchHostel(db, hostelId, (document) -> {
+            if (document != null && document.exists()) {
+                Map<String, Object> rooms = (Map<String, Object>) document.get("rooms");
+                if (rooms != null && rooms.containsKey(roomNum)) {
+                    handleExistingRoom(db, hostelId, roomNum, rooms, hostelerId, callback);
+                } else {
+                    handleNewRoom(db, hostelId, roomNum, rooms, hostelerId, callback);
+                }
+            } else {
+                // Hostel does not exist
+                Log.d("Hostel Check", "No such hostel document.");
+                callback.onCallback(0);
+            }
+        }, (e) -> {
+            // Error handling
+            Log.w("Firestore Data", "Error getting hostel document.", e);
+            callback.onCallback(null);
+        });
+    }
 
-                                        db.collection("hostels").document(hostelId).update("rooms", rooms)
-                                                .addOnSuccessListener(aVoid -> callback.onCallback(0)) // Successfully added, return 0
-                                                .addOnFailureListener(e -> {
-                                                    Log.e("Firestore Update", "Error updating hostel rooms", e);
-                                                    callback.onCallback(-1); // Indicate an error occurred
-                                                });
-                                        callback.onCallback(roomInfo.size());
-                                    } else {
-                                        // Room information is not available
-                                        callback.onCallback(0);
-                                    }
-                                } else {
-                                    // Room number does not exist
-                                    Map<String,Object> newRoomNumber = new HashMap<>();
-                                    roomId =  roomNum + ".1";
-                                    newRoomNumber.put(roomNum + ".1",hostelerId);
-                                    rooms.put(roomNum,newRoomNumber);
-                                    db.collection("hostels").document(hostelId).update("rooms", rooms)
-                                            .addOnSuccessListener(aVoid -> callback.onCallback(0)) // Successfully added, return 0
-                                            .addOnFailureListener(e -> {
-                                                Log.e("Firestore Update", "Error updating hostel rooms", e);
-                                                callback.onCallback(-1); // Indicate an error occurred
-                                            });
-                                    callback.onCallback(0);
-                                }
-                            } else {
-                                // Hostel does not exist
-                                Log.d("Hostel Check", "No such hostel document.");
-                                callback.onCallback(0);
-                            }
-                        } else {
-                            // Error getting document
-                            Log.w("Firestore Data", "Error getting hostel document.", task.getException());
-                            callback.onCallback(null); // Handle error case
-                        }
-                    }
+    private void fetchHostel(FirebaseFirestore db, String hostelId, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
+        db.collection("hostels").document(hostelId)
+                .get()
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
+    }
+
+    private void handleExistingRoom(FirebaseFirestore db, String hostelId, String roomNum, Map<String, Object> rooms, String hostelerId, RoomSizeCallback callback) {
+        Map<String, Object> roomInfo = (Map<String, Object>) rooms.get(roomNum);
+        if (roomInfo != null) {
+            // Generate room ID and add hosteler
+            roomId = roomNum + "." + (roomInfo.size() + 1);
+            roomInfo.put(roomId, hostelerId);
+            updateHostelRooms(db, hostelId, rooms, callback, roomInfo.size());
+        } else {
+            callback.onCallback(0);
+        }
+    }
+
+    private void handleNewRoom(FirebaseFirestore db, String hostelId, String roomNum, Map<String, Object> rooms, String hostelerId, RoomSizeCallback callback) {
+        // Create new room and add hosteler
+        if (rooms == null) {
+            rooms = new HashMap<>();
+        }
+        roomId = roomNum + ".1";
+        Map<String, Object> newRoomInfo = new HashMap<>();
+        newRoomInfo.put(roomId, hostelerId);
+        rooms.put(roomNum, newRoomInfo);
+
+        updateHostelRooms(db, hostelId, rooms, callback, 0);
+    }
+
+    private void updateHostelRooms(FirebaseFirestore db, String hostelId, Map<String, Object> rooms, RoomSizeCallback callback, int roomSize) {
+        db.collection("hostels").document(hostelId)
+                .update("rooms", rooms)
+                .addOnSuccessListener(aVoid -> callback.onCallback(roomSize))
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Update", "Error updating hostel rooms", e);
+                    callback.onCallback(-1);
                 });
     }
+
 
 
     // Store Hosteler data
@@ -160,6 +165,28 @@ public class FirebaseHelper {
         });
 
 
+    }
+
+    // get user name
+    public void getUserName(String userId, Context currentActivity, Class<?> newActivity){
+        firestore.collection("hostelers").document(userId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String username = document.getString("name");
+                                helperClass.customToast(currentActivity, "Logged in successfully!!\n Welcome " + username + " \uD83D\uDE03");
+                                helperClass.startFreshActivity(currentActivity, newActivity);
+                            } else {
+                                helperClass.customToast(currentActivity, "User does not exist \uD83E\uDD7A");
+                            }
+                        } else {
+                            helperClass.customToast(currentActivity, "Something went wrong \uD83E\uDD7A");
+                        }
+                    }
+                });
     }
 
     // Sign out the user

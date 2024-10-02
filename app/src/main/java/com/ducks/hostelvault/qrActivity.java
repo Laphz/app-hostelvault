@@ -35,9 +35,12 @@ public class qrActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static final int CAMERA_REQUEST_CODE = 101;
     private DatabaseReference ref;
+    HelperClass helperClass;
+    FirebaseHelper firebaseHelper;
+    User user;
 
     // Constants for database paths
-    private static final String ADMIN_DB_PATH = "Admin";
+    private static final String ADMIN_DB_PATH = "qrs";
     private static final String REGISTERED_USERS_DB_PATH = "Registered Users";
     private static final String STATUS_DB_PATH = "Status";
 
@@ -53,6 +56,10 @@ public class qrActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
+
+        // helper class
+        firebaseHelper = new FirebaseHelper();
+        helperClass = new HelperClass();
 
         // Initializing views
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -78,7 +85,8 @@ public class qrActivity extends AppCompatActivity {
                 String value = result.getText();
                 runOnUiThread(() -> {
                     scanner.stopPreview();
-                    matchQr(value); // Call function to match QR with Firebase database
+                    matchQr(value);// Call function to match QR with Firebase database
+                    helperClass.startFreshActivity(qrActivity.this, homeActivity.class);
                 });
             }
         });
@@ -87,33 +95,33 @@ public class qrActivity extends AppCompatActivity {
     // Method to check if QR matches the database and update status
     public void matchQr(String scannedValue) {
         ref = FirebaseDatabase.getInstance().getReference(ADMIN_DB_PATH);
-        Query checkQr = ref.orderByChild("qr").equalTo(scannedValue);
+        Query checkQr = ref.child(user.getHostelId()).equalTo(scannedValue);
         checkQr.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    String userName = sharedPreferences.getString("userName", "Unknown User");
-                    if (userName == null || userName.equals("Unknown User")) {
+                    String userName = user.getName();
+                    if (userName == null) {
                         changeStatus();
                         return;
                     }
                 } else {
-                    customToast("No QR found in the database.");
-                    startNewActivity(qrActivity.this, homeActivity.class);
+                    helperClass.customToast(qrActivity.this,"No QR found in the database.");
+                    helperClass.startNewActivity(qrActivity.this, homeActivity.class);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 logError("Database error: " + error.getMessage());
-                customToast("Database error. Please try again.");
+                helperClass.customToast(qrActivity.this,"Database error. Please try again.");
             }
         });
     }
 
     // Changing status in the database
     public void changeStatus() {
-        String scannedUserUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String scannedUserUId = firebaseHelper.getCurrentUser().getUid();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(REGISTERED_USERS_DB_PATH).child(scannedUserUId);
 
         // Fetch the user's name
@@ -125,14 +133,14 @@ public class qrActivity extends AppCompatActivity {
                     if (userName != null) {
                         updateStatus(userName);
                     } else {
-                        customToast("User details not found.");
+                        helperClass.customToast(qrActivity.this,"User details not found.");
                     }
                 } else {
-                    customToast("User data not found.");
+                    helperClass.customToast(qrActivity.this,"User data not found.");
                 }
             } else {
                 logError("Error getting user details: " + task.getException());
-                customToast("Failed to retrieve user details.");
+                helperClass.customToast(qrActivity.this,"Failed to retrieve user details.");
             }
         });
     }
@@ -151,25 +159,21 @@ public class qrActivity extends AppCompatActivity {
                 // Update the status in the database
                 statusRef.setValue(newStatus).addOnCompleteListener(updateTask -> {
                     if (updateTask.isSuccessful()) {
-                        customToast("User : " + userName + " is " + newStatus + "!!");
-                        startNewActivity(qrActivity.this, homeActivity.class);
+                        helperClass.customToast(qrActivity.this,"User: " + userName + " is " + newStatus + "!!");
+                        helperClass.startNewActivity(qrActivity.this, homeActivity.class);
                     } else {
                         logError("Failed to update status: " + updateTask.getException());
-                        customToast("Failed to change status. Please try again.");
+                        helperClass.customToast(qrActivity.this,"Failed to change status. Please try again.");
                     }
                 });
             } else {
                 logError("Error getting status: " + task.getException());
-                customToast("Failed to retrieve current status.");
+                helperClass.customToast(qrActivity.this,"Failed to retrieve current status.");
             }
         });
     }
 
-    // Start a new activity
-    public void startNewActivity(Context currentActivity, Class<?> newActivity) {
-        Intent intent = new Intent(currentActivity, newActivity);
-        startActivity(intent);
-    }
+
 
     // Check if camera permission is granted
     public void checkCameraPermission() {
@@ -191,7 +195,7 @@ public class qrActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                setupCodeScanner();
             } else {
-                customToast("Camera permission is required to use this app.");
+                helperClass.customToast(qrActivity.this,"Camera permission is required to use this app.");
             }
         }
     }
@@ -215,10 +219,5 @@ public class qrActivity extends AppCompatActivity {
     // Log error and show message
     private void logError(String message) {
         Log.e("QRScanner", message);
-    }
-
-    // Custom toast method
-    private void customToast(String message) {
-        Toast.makeText(qrActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }
