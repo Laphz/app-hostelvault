@@ -37,7 +37,8 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     ImageView menuIcon;
     ConstraintLayout contentView;
-    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseHelper firebaseHelper;
+    HelperClass helperClass;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -60,14 +61,14 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         menuIcon = findViewById(R.id.menu_icon);
         contentView = findViewById(R.id.contentView);
-
-
+        firebaseHelper = new FirebaseHelper();
+        helperClass = new HelperClass();
 
         // Fetch the user's username and status
         fetchUserNameAndStatus();
 
         // open scanner
-        redirectToQr();;
+        redirectToQr();
 
         // show drawer
         showNavigation();
@@ -136,11 +137,11 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         int itemId = item.getItemId();
 
         if (itemId == R.id.settings) {
-            startNewActivity(homeActivity.this, comingSoon.class);
+            helperClass.startNewActivity(homeActivity.this, comingSoon.class);
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         } else if (itemId == R.id.aboutus) {
-            startNewActivity(homeActivity.this, comingSoon.class);
+            helperClass.startNewActivity(homeActivity.this, comingSoon.class);
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         } else if (itemId == R.id.logout) {
@@ -188,6 +189,7 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*---------------------------------------------------------Status Functions-----------------------------------------------------------*/
+
     // Fetch user name and status
     private void fetchUserNameAndStatus() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -243,23 +245,12 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void logout() {
-        auth.signOut();
-        startFreshActivity(homeActivity.this, loginActivity.class);
+        firebaseHelper.signOutUser();
+        helperClass.startFreshActivity(homeActivity.this, launchActivity.class);
 
     }
 
-    private void startNewActivity(Context currentActivity, Class<?> newActivity) {
-        Intent intent = new Intent(currentActivity, newActivity);
-        startActivity(intent);
-    }
 
-    private void startFreshActivity(Context currentActivity, Class<?> newActivity) {
-        Intent intent = new Intent(currentActivity, newActivity);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
 
     private void customToast(String message) {
         Toast.makeText(homeActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -270,10 +261,8 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                startNewActivity(homeActivity.this, qrActivity.class);
+                helperClass.startNewActivity(homeActivity.this, qrActivity.class);
             }
         });
     }
-
-
 }

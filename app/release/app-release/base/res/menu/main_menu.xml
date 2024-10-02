@@ -1,28 +1,0 @@
-
-Ü	
-;
-android*http://schemas.android.com/apk/res/androidBmenu*–	
-	group"V
-*http://schemas.android.com/apk/res/androidcheckableBehaviorsingle"(àƒ„2:0*è
-ßitem"k
-*http://schemas.android.com/apk/res/androidtitle@string/settings"(áƒ„2
-ÙÌøstring/settings0"†
-*http://schemas.android.com/apk/res/androidicon@drawable/baseline_settings_24"(‚€„2)
-'‡ ødrawable/baseline_settings_240"a
-*http://schemas.android.com/apk/res/androidid@+id/settings"(Ğ„2
-­ƒ¨øid/settings0.*è
-ßitem"k
-*http://schemas.android.com/apk/res/androidtitle@string/about_us"(áƒ„2
-›€Ìøstring/about_us0"ˆ
-*http://schemas.android.com/apk/res/androidicon@drawable/baseline_info_outline"(‚€„2*
-(„ ødrawable/baseline_info_outline0"_
-*http://schemas.android.com/apk/res/androidid@+id/aboutus"(Ğ„2
-€¨ø
-id/aboutus0.*Õ
-Ìitem"g
-*http://schemas.android.com/apk/res/androidtitle@string/logout"(áƒ„2
-â€Ìøstring/logout0"|
-*http://schemas.android.com/apk/res/androidicon@drawable/baseline_logout"(‚€„2$
-"… ødrawable/baseline_logout0"]
-*http://schemas.android.com/apk/res/androidid@+id/logout"(Ğ„2
-‹‚¨ø	id/logout0,,B
