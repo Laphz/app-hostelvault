@@ -2,6 +2,7 @@ package com.ducks.hostelvault;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -23,6 +24,14 @@ public class forgotPasswrd extends AppCompatActivity {
     EditText email;
     FirebaseHelper firebaseHelper;
     HelperClass helperClass;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Configuration overrideConfiguration = new Configuration(newBase.getResources().getConfiguration());
+        overrideConfiguration.fontScale = 1.0f;  // Set fontScale to 1.0 to avoid scaling
+        Context context = newBase.createConfigurationContext(overrideConfiguration);
+        super.attachBaseContext(context);
+    }
 
 
     @Override

@@ -1,50 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:gravity="center"
-    android:orientation="vertical"
     tools:context=".launchActivity">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/goo">
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@drawable/goo"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </ImageView>
 
-    <Button
-        android:id="@+id/launchLogin"
-        android:layout_width="370dp"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_bg"
-        android:backgroundTint="@color/lavender"
+        android:autoSizeMaxTextSize="40sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="@font/poppins_semibold"
-        android:gravity="center"
-        android:text="@string/login"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="28sp">
+        android:text="Welcome !"
+        android:textColor="#8692f7"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.987" />
 
-    </Button>
-
-    <Button
-        android:id="@+id/launchRegister"
-        android:layout_width="370dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_bg_transparent"
-        android:fontFamily="@font/poppins_semibold"
-        android:gravity="center"
-        android:text="@string/register"
-        android:textAllCaps="true"
-        android:textColor="@color/lavender"
-        android:textSize="28sp" />
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/launchLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="28sp"
+            android:autoSizeStepGranularity="1sp"
+            android:background="@drawable/btn_bg"
+            android:backgroundTint="@color/lavender"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:text="@string/login"
+            android:textAllCaps="true"
+            android:textSize="28sp"
+            android:textColor="@color/white">
 
 
-</LinearLayout>
+        </com.google.android.material.button.MaterialButton>
+
+        <LinearLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/launchRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="170dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="8dp"
+                android:background="#505F5F5F" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="9dp"
+                android:fontFamily="@font/poppins"
+                android:text="or"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/divider2"
+                app:layout_constraintStart_toEndOf="@+id/divider1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="170dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="20dp"
+                android:background="#505f5f5f" />
+
+
+        </LinearLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/launchRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_bg_transparent"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textAllCaps="true"
+            android:textColor="@color/lavender"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="28sp"
+            android:autoSizeStepGranularity="1sp"
+            android:textSize="28sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

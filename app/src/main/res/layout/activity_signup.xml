@@ -53,7 +53,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autofillHints="username"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/enter_name"
@@ -75,7 +75,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autofillHints="emailAddress"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/you_example_com"
@@ -98,7 +98,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_phn"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autofillHints="phone"
                     android:inputType="phone"
                     android:fontFamily="@font/poppins"
@@ -122,7 +122,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_hostel_id"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:hint="Hostel Id"
                     android:textColor="@color/white"
@@ -145,7 +145,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_room_num"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:inputType="number"
                     android:hint="Room Number"
@@ -169,7 +169,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_passwrd"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autofillHints="password"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/enter_password"
@@ -193,7 +193,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_confpasswrd"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autofillHints="password"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/confirm_password"

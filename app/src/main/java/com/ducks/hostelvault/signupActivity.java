@@ -1,5 +1,7 @@
 package com.ducks.hostelvault;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +26,14 @@ public class signupActivity extends AppCompatActivity {
     private FirebaseHelper firebaseHelper;
     private inputValidator inputValidator;
     private HelperClass helperClass;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Configuration overrideConfiguration = new Configuration(newBase.getResources().getConfiguration());
+        overrideConfiguration.fontScale = 1.0f;  // Set fontScale to 1.0 to avoid scaling
+        Context context = newBase.createConfigurationContext(overrideConfiguration);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
