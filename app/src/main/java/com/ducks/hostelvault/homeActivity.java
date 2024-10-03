@@ -1,7 +1,6 @@
 package com.ducks.hostelvault;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,7 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class homeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class homeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final float END_SCALE = 0.7f;
     ImageButton redirectToQr;
@@ -37,7 +36,9 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     ImageView menuIcon;
     ConstraintLayout contentView;
-    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseHelper firebaseHelper;
+    HelperClass helperClass;
+    User user;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -46,7 +47,6 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         Context context = newBase.createConfigurationContext(overrideConfiguration);
         super.attachBaseContext(context);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +60,17 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         menuIcon = findViewById(R.id.menu_icon);
         contentView = findViewById(R.id.contentView);
-
-
+        firebaseHelper = new FirebaseHelper();
+        helperClass = new HelperClass();
 
         // Fetch the user's username and status
         fetchUserNameAndStatus();
 
         // open scanner
-        redirectToQr();;
+        redirectToQr();
 
         // show drawer
         showNavigation();
-
 
 
 
@@ -80,18 +79,16 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     /*-----------------------------------------------------------Drawer Functions--------------------------------------------------------------*/
 
     // show navigation
-    private void showNavigation(){
-        // Navigation drawer
+    private void showNavigation() {
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.settings);
-        menuIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(drawerLayout.isDrawerVisible(GravityCompat.START)){drawerLayout.closeDrawer(GravityCompat.START);}
 
-                else {drawerLayout.openDrawer(GravityCompat.START);}
-
+        menuIcon.setOnClickListener(view -> {
+            if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         });
         animateNavigationDrawer();
@@ -99,52 +96,28 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerVisible(GravityCompat.START)){
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
-
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.home:
-//                drawerLayout.closeDrawer(GravityCompat.START);
-//                return true;
-//            case R.id.settings:
-//                startNewActivity(homeActivity.this,settingsActivity.class);
-//                drawerLayout.closeDrawer(GravityCompat.START);
-//                return true;
-//            case R.id.aboutus:
-//                startNewActivity(homeActivity.this,aboutUsActivity.class);
-//                drawerLayout.closeDrawer(GravityCompat.START);
-//                return true;
-//            case R.id.logout:
-//                logout();
-//                drawerLayout.closeDrawer(GravityCompat.START);
-//                return true;
-//            default:
-//                return false;
-//
-//        }
-//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
 
         if (itemId == R.id.settings) {
-            startNewActivity(homeActivity.this, comingSoon.class);
+            helperClass.startNewActivity(homeActivity.this, comingSoon.class);
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         } else if (itemId == R.id.aboutus) {
-            startNewActivity(homeActivity.this, comingSoon.class);
+            helperClass.startNewActivity(homeActivity.this, comingSoon.class);
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         } else if (itemId == R.id.logout) {
-            logout();
+            firebaseHelper.signOutUser();
+            helperClass.startNewActivity(homeActivity.this, launchActivity.class);
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         } else {
@@ -152,68 +125,57 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-//     animation of drawer
+    // Animate the drawer
     private void animateNavigationDrawer() {
-        drawerLayout.setScrimColor(Color.TRANSPARENT); // No background overlay (optional)
+        drawerLayout.setScrimColor(Color.TRANSPARENT);
 
-        // Add a listener for drawer slide events
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                // 3D Rotation effect
-                final float rotationAngle = -10 * slideOffset; // Rotate content by 10 degrees based on slide offset
-                contentView.setPivotX(contentView.getWidth() * 0.5f); // Set pivot to the center of the view
-                contentView.setPivotY(contentView.getHeight() * 0.5f); // Set pivot point for Y-axis rotation
-                contentView.setRotationY(rotationAngle); // Rotate the content view along the Y-axis
-
-                // Fade effect (content fades out as the drawer opens)
-                contentView.setAlpha(1 - (slideOffset * 0.5f)); // Slight fade-out effect
-
-                // Slide effect
-                contentView.setTranslationX(drawerView.getWidth() * slideOffset * 0.5f); // Content moves 50% of drawer width
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                // Optionally, do something when the drawer is fully opened
+                final float rotationAngle = -10 * slideOffset;
+                contentView.setPivotX(contentView.getWidth() * 0.5f);
+                contentView.setPivotY(contentView.getHeight() * 0.5f);
+                contentView.setRotationY(rotationAngle);
+                contentView.setAlpha(1 - (slideOffset * 0.5f));
+                contentView.setTranslationX(drawerView.getWidth() * slideOffset * 0.5f);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                // Optionally, do something when the drawer is fully closed
-                contentView.setRotationY(0); // Reset rotation when the drawer is closed
-                contentView.setAlpha(1.0f);  // Reset the transparency to fully visible
+                contentView.setRotationY(0);
+                contentView.setAlpha(1.0f);
             }
         });
     }
 
     /*---------------------------------------------------------Status Functions-----------------------------------------------------------*/
+
+
     // Fetch user name and status
     private void fetchUserNameAndStatus() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Registered Users").child(userId);
 
-        userRef.child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        String userId = firebaseHelper.getCurrentUser().getUid();
+        firebaseHelper.getHostelId(userId, new FirebaseHelper.hostelIdCallback() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    String userName = task.getResult().getValue(String.class);
-                    if (userName != null) {
-                        fetchUserStatusByUsername(userName);
-                    } else {
-                        status.setText("User name not found.");
+            public void onCallback(String hostelId) {
+                firebaseHelper.getUserName(userId, new FirebaseHelper.userNameCallback() {
+                    @Override
+                    public void onCallback(String userName) {
+                        if (userName != null) {
+                            fetchUserStatusByUsername(userName,hostelId);
+                        } else {
+                            status.setText("User name not found.");
+                        }
                     }
-                } else {
-                    Log.e("FetchUserName", "Error getting user name: " + task.getException());
-                    status.setText("Error fetching user name");
-                }
+                });
             }
         });
+
     }
 
     // Fetch user status using the username
-    private void fetchUserStatusByUsername(String userName) {
-        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("Status").child(userName);
+    private void fetchUserStatusByUsername(String userName,String hostelId) {
+        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("status/" + hostelId).child(userName);
 
         statusRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -232,48 +194,15 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+
     private void updateStatusUI(String userStatus) {
-        if ("IN".equals(userStatus)) {
-            indicator.setImageResource(R.drawable.baseline_circle_green_24);
-            status.setText("You are IN!!");
-        } else {
-            indicator.setImageResource(R.drawable.baseline_circle_red_24);
-            status.setText("You are OUT!!");
-        }
-    }
-
-    private void logout() {
-        auth.signOut();
-        startFreshActivity(homeActivity.this, loginActivity.class);
-
-    }
-
-    private void startNewActivity(Context currentActivity, Class<?> newActivity) {
-        Intent intent = new Intent(currentActivity, newActivity);
-        startActivity(intent);
-    }
-
-    private void startFreshActivity(Context currentActivity, Class<?> newActivity) {
-        Intent intent = new Intent(currentActivity, newActivity);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    private void customToast(String message) {
-        Toast.makeText(homeActivity.this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void redirectToQr(){
-        redirectToQr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                startNewActivity(homeActivity.this, qrActivity.class);
-            }
-        });
+        indicator.setImageResource("IN".equals(userStatus) ? R.drawable.baseline_circle_green_24 : R.drawable.baseline_circle_red_24);
+        status.setText("IN".equals(userStatus) ? "You are IN!!" : "You are OUT!!");
     }
 
 
+
+    private void redirectToQr() {
+        redirectToQr.setOnClickListener(v -> helperClass.startFreshActivity(homeActivity.this, qrActivity.class));
+    }
 }

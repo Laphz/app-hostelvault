@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,15 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class signupActivity extends AppCompatActivity {
 
-    private EditText editTextName, editTextEmail, editTextPhone, editTextPassword, editTextConfirmPassword,editTextHostelId,editTextRoomNum;
+    private EditText editTextName, editTextEmail, editTextPhone, editTextPassword, editTextConfirmPassword, editTextHostelId, editTextRoomNum;
     private ProgressBar progressBar;
     private FirebaseHelper firebaseHelper;
-    private inputValidator inputValidator;
+    private InputValidator inputValidator;
     private HelperClass helperClass;
 
     @Override
@@ -49,7 +46,7 @@ public class signupActivity extends AppCompatActivity {
         editTextRoomNum = findViewById(R.id.et_room_num);
 
         firebaseHelper = new FirebaseHelper();
-        inputValidator = new inputValidator();
+        inputValidator = new InputValidator();
         helperClass = new HelperClass();
 
         Button signUpButton = findViewById(R.id.signup_btn);
@@ -71,9 +68,6 @@ public class signupActivity extends AppCompatActivity {
         String roomNum = editTextRoomNum.getText().toString().trim();
 
 
-
-
-
         EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone};
 
         if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, inputFields)) {
@@ -85,17 +79,16 @@ public class signupActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = firebaseHelper.getCurrentUser();
                     String uid = firebaseUser.getUid();
-                    user user = new user(name, email, phoneNum);
 
-                    //send email verification link
+
+                    // send email verification link
                     firebaseHelper.sendEmailVerification(firebaseUser);
-                    
+
                     // check email verification
-                    helperClass.startNewActivity(signupActivity.this,verifyEmailActivity.class);
+                    helperClass.startNewActivity(signupActivity.this, verifyEmailActivity.class);
 
-                    // if email is verified then only store the data
-                    firebaseHelper.storeHostelerData(uid,name,email,phoneNum,hostelId,roomNum);
-
+                    // store the data
+                    firebaseHelper.storeHostelerData(uid, name, email, phoneNum, hostelId, roomNum);
 
                 } else {
                     helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
