@@ -22,8 +22,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="150dp"
-        android:layout_marginTop="50dp"
         android:layout_height="150dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/picsart"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
@@ -39,7 +39,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="60dp"
         android:gravity="start"
         android:orientation="vertical"
         android:padding="20dp"
@@ -62,12 +62,26 @@
 
         </TextView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:autoSizeMaxTextSize="28sp"
+            android:layout_marginTop="20dp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/poppins"
+            android:text="Enter Email"
+            android:textColor="@color/black"
+            android:textScaleX="1">
+
+        </TextView>
+
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:textColorHint="@color/black"
             app:endIconMode="clear_text">
 
@@ -75,12 +89,11 @@
                 android:id="@+id/loginEt_email"
                 style="@style/Theme.Hostelvault"
                 android:layout_width="match_parent"
-                android:background="@drawable/btn_bg_transparent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:autofillHints="emailAddress"
+                android:background="@drawable/btn_bg_transparent"
                 android:fontFamily="@font/poppins"
-                android:hint="@string/you_example_com"
                 android:includeFontPadding="true"
                 android:inputType="text"
                 android:paddingStart="15dp"
@@ -93,26 +106,38 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:autoSizeMaxTextSize="28sp"
+            android:layout_marginTop="20dp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/poppins"
+            android:text="Enter Password"
+            android:textColor="@color/black"
+            android:textScaleX="1">
+
+        </TextView>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:textColorHint="@color/black"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginET_pwd"
-                android:layout_width="match_parent"
                 style="@style/Theme.Hostelvault"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/btn_bg_transparent"
                 android:layout_marginTop="10dp"
                 android:autofillHints="password"
+                android:background="@drawable/btn_bg_transparent"
                 android:fontFamily="@font/poppins"
-                android:hint="@string/enter_password"
                 android:includeFontPadding="true"
                 android:inputType="textPassword"
                 android:paddingStart="15dp"
@@ -129,7 +154,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-
             android:orientation="horizontal">
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -217,37 +241,37 @@
         </com.google.android.material.button.MaterialButton>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="horizontal">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:text="@string/not_yet_registered"
-                android:textColor="@color/black"
-                android:textSize="12sp">
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="@string/not_yet_registered"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="12sp">-->
 
-            </TextView>
+        <!--            </TextView>-->
 
-            <TextView
-                android:id="@+id/loginIntosignup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:fontFamily="@font/poppins"
-                android:text="Sign Up"
-                android:textColor="@color/blue"
-                android:textSize="12sp">
+        <!--            <TextView-->
+        <!--                android:id="@+id/loginIntosignup"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginLeft="5dp"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="Sign Up"-->
+        <!--                android:textColor="@color/blue"-->
+        <!--                android:textSize="12sp">-->
 
-            </TextView>
+        <!--            </TextView>-->
 
 
-        </LinearLayout>
+        <!--        </LinearLayout>-->
 
     </LinearLayout>
 
@@ -255,8 +279,13 @@
         android:id="@+id/progressbarSignin"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
     </ProgressBar>
 
