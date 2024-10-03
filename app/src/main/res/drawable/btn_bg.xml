@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <stroke
-        android:color="@color/lavender"
+        android:color="#004058"
         android:width="2dp">
     </stroke>
     <corners
         android:radius="10dp">
     </corners>
     <solid
-        android:color="@color/card_color">
-
+        android:color="@color/dark_teal">
     </solid>
 </shape>

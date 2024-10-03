@@ -13,6 +13,7 @@
     <color name="soft_White">#FAFAFA</color>
     <color name="muted_Lavender">#A9A6D6</color>
     <color name="rich_Blue">#0D3B66</color>
+    <color name="teal">#008080</color>
     <color name="bright_Cyan">#00B4D8</color>
     <color name="white_soft">#FFFFFF</color>
     <color name="navy_Blue">#003049</color>
@@ -27,6 +28,7 @@
     <color name="blue">#0091EA</color>
     <color name="bg_color">#1A1A24</color>
     <color name="card_color">#242333</color>
+    <color name="card_color_25">#FFFFFF</color>
     <color name="btn_color_top">#7B58FC</color>
     <color name="btn_color_bottom">#6440F8</color>
     <color name="et_border_color">#938FED</color>
@@ -34,6 +36,9 @@
     <color name="hint">#646490</color>
     <color name="remme">#4F4FA5</color>
     <color name="transparent">#004F4FA5</color>
+    <color name="peach">#FFCBA4</color>
+    <color name="navy_blue">#001F54</color>
+    <color name="blushpink">#FFB6C1</color>
     <color name="drawer_scrim">#80000000</color> <!-- 50% opaque black -->
 
 </resources>

@@ -1,170 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_bg_gradient"
-    android:gravity="center"
-    android:padding="30dp"
+    android:background="#FFFFFF"
+    android:gravity="bottom"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".loginActivity">
 
-    <androidx.cardview.widget.CardView
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_marginRight="32dp"-->
+    <!--        android:layout_marginLeft="32dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:cardCornerRadius="17dp"-->
+    <!--        app:cardElevation="24dp">-->
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_height="150dp"
+        android:src="@drawable/picsart"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    </androidx.cardview.widget.CardView>-->
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="20dp">
+        android:layout_marginBottom="80dp"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/logintv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/sign_in"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="36sp">
+
+        </TextView>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/boarder"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/black"
+            app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/loginEt_email"
+                style="@style/Theme.Hostelvault"
+                android:layout_width="match_parent"
+                android:background="@drawable/btn_bg_transparent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:autofillHints="emailAddress"
+                android:fontFamily="@font/poppins"
+                android:hint="@string/you_example_com"
+                android:includeFontPadding="true"
+                android:inputType="text"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey"
+                android:textSize="15sp"
+                tools:ignore="RtlSymmetry">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/black"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/loginET_pwd"
+                android:layout_width="match_parent"
+                style="@style/Theme.Hostelvault"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_bg_transparent"
+                android:layout_marginTop="10dp"
+                android:autofillHints="password"
+                android:fontFamily="@font/poppins"
+                android:hint="@string/enter_password"
+                android:includeFontPadding="true"
+                android:inputType="textPassword"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey"
+                android:textSize="15sp"
+                tools:ignore="RtlSymmetry">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:orientation="horizontal">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/rememberME"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:buttonIconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.428">
+
+            </com.google.android.material.checkbox.MaterialCheckBox>
 
             <TextView
-                android:id="@+id/logintv"
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
-                android:layout_height="43dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="@string/sign_in"
-                android:textAllCaps="true"
-                android:textColor="@color/lavender"
-                android:textSize="36sp">
+                android:layout_height="25dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:autoSizeMaxTextSize="28sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/poppins"
+                android:text="@string/remember_me"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
+                android:textScaleX="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.135"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/forgotpwd"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:autoSizeMaxTextSize="28sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/poppins"
+                android:text="@string/forgot_password"
+                android:textColor="@color/blue"
+                android:textFontWeight="500"
+                android:textScaleX="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
             </TextView>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/Theme.Hostelvault"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:autoSizeMaxTextSize="28sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/btn_bg"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:text="@string/sign_in"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp">
+
+        </com.google.android.material.button.MaterialButton>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColorHint="@color/hint"
-                app:endIconMode="clear_text">
+                android:fontFamily="@font/poppins"
+                android:text="@string/not_yet_registered"
+                android:textColor="@color/black"
+                android:textSize="12sp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/loginEt_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:autofillHints="emailAddress"
-                    android:fontFamily="@font/poppins"
-                    android:hint="@string/you_example_com"
-                    android:includeFontPadding="true"
-                    android:inputType="text"
-                    android:paddingStart="15dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/grey"
-                    android:textSize="15sp"
-                    tools:ignore="RtlSymmetry">
+            </TextView>
 
-                </com.google.android.material.textfield.TextInputEditText>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/loginIntosignup"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColorHint="@color/hint"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/white">
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/poppins"
+                android:text="Sign Up"
+                android:textColor="@color/blue"
+                android:textSize="12sp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/loginET_pwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:autofillHints="password"
-                    android:fontFamily="@font/poppins"
-                    android:hint="@string/enter_password"
-                    android:includeFontPadding="true"
-                    android:inputType="textPassword"
-                    android:paddingStart="15dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/grey"
-                    android:textSize="15sp"
-                    tools:ignore="RtlSymmetry">
+            </TextView>
 
-                </com.google.android.material.textfield.TextInputEditText>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="15dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/rememberME"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </com.google.android.material.checkbox.MaterialCheckBox>
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="1dp"
-                    android:text="@string/remember_me"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toEndOf="@+id/rememberME"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/forgotpwd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:text="@string/forgot_password"
-                    android:textColor="@color/lavender"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </TextView>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="17dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_bg"
-                android:fontFamily="@font/poppins_semibold"
-                android:gravity="center"
-                android:text="@string/sign_in"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="24sp">
-
-            </com.google.android.material.button.MaterialButton>
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressbarSignin"
@@ -176,4 +261,4 @@
     </ProgressBar>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
