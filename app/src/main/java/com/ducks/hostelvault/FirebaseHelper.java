@@ -2,7 +2,6 @@ package com.ducks.hostelvault;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.ViewStructure;
 
 import androidx.annotation.NonNull;
 
@@ -24,7 +23,7 @@ public class FirebaseHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private static final String TAG = "FirebaseHelper";
-    private String roomId;
+    private String roomId, hostel_id;
     private HelperClass helperClass;
 
 
@@ -33,6 +32,7 @@ public class FirebaseHelper {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
     }
+
 
     // Custom listener interface for hostel ID fetching
     public interface OnHostelCodeFetchedListener {
@@ -72,16 +72,15 @@ public class FirebaseHelper {
     }
 
     public void checkHostelAndRoom(String hostelerId, String hostelId, String roomNum, RoomSizeCallback callback) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Fetch the hostel by ID
-        fetchHostel(db, hostelId, (document) -> {
+        fetchHostel(firestore, hostelId, (document) -> {
             if (document != null && document.exists()) {
                 Map<String, Object> rooms = (Map<String, Object>) document.get("rooms");
                 if (rooms != null && rooms.containsKey(roomNum)) {
-                    handleExistingRoom(db, hostelId, roomNum, rooms, hostelerId, callback);
+                    handleExistingRoom(firestore, hostelId, roomNum, rooms, hostelerId, callback);
                 } else {
-                    handleNewRoom(db, hostelId, roomNum, rooms, hostelerId, callback);
+                    handleNewRoom(firestore, hostelId, roomNum, rooms, hostelerId, callback);
                 }
             } else {
                 // Hostel does not exist
@@ -137,8 +136,6 @@ public class FirebaseHelper {
                 });
     }
 
-
-
     // Store Hosteler data
     public void storeHostelerData(String hostelerId, String name, String email, String mobile,String hostelId, String roomNum) {
         checkHostelAndRoom(hostelerId,hostelId, roomNum, new RoomSizeCallback() {
@@ -167,8 +164,8 @@ public class FirebaseHelper {
 
     }
 
-    // get user name
-    public void getUserName(String userId, Context currentActivity, Class<?> newActivity){
+    // get user name toast
+    public void getUserNameToast(String userId, Context currentActivity){
         firestore.collection("hostelers").document(userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -177,8 +174,7 @@ public class FirebaseHelper {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 String username = document.getString("name");
-                                helperClass.customToast(currentActivity, "Logged in successfully!!\n Welcome " + username + " \uD83D\uDE03");
-                                helperClass.startFreshActivity(currentActivity, newActivity);
+                                helperClass.customToast(currentActivity, "Logged in successfully!!\nWelcome " + username + " \uD83D\uDE03");
                             } else {
                                 helperClass.customToast(currentActivity, "User does not exist \uD83E\uDD7A");
                             }
@@ -189,6 +185,35 @@ public class FirebaseHelper {
                 });
     }
 
+    // get userName
+    public void getUserName(String userId, final userNameCallback callback){
+        firestore.collection("hostelers").document(userId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String username = document.getString("name");
+                                callback.onCallback(username);
+                            } else {
+                                Log.d("FirebaseHelper", "User not found");
+                                callback.onCallback(null);
+                            }
+                        } else {
+                            Log.d("FirebaseHelper", "Error getting documents: ", task.getException());
+                            callback.onCallback(null); // Handle errors
+                        }
+                    }
+                });
+    }
+    // Callback interface
+    public interface userNameCallback {
+        void onCallback(String userName);
+    }
+
+
+
     // Sign out the user
     public void signOutUser() {
         firebaseAuth.signOut();
@@ -198,6 +223,30 @@ public class FirebaseHelper {
     public void signInUser(String email, String password, OnCompleteListener<AuthResult> onCompleteListener) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(onCompleteListener);
+    }
+
+    // fetch hostel_id from uid
+    public void getHostelId(String userUid, final hostelIdCallback callback) {
+        firestore.document("hostelers/" + userUid).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String hostel_id = document.getString("hostel_id");
+                    callback.onCallback(hostel_id); // Pass hostel_id to callback
+                } else {
+                    Log.d("FirebaseHelper", "User not found");
+                    callback.onCallback(null); // Handle case where the document doesn't exist
+                }
+            } else {
+                Log.d("FirebaseHelper", "Error getting documents: ", task.getException());
+                callback.onCallback(null); // Handle errors
+            }
+        });
+    }
+
+    // Callback interface
+    public interface hostelIdCallback {
+        void onCallback(String hostelId);
     }
 
     // Reset the user's password

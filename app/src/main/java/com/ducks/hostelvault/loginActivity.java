@@ -1,5 +1,7 @@
 package com.ducks.hostelvault;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -33,6 +34,15 @@ public class loginActivity extends AppCompatActivity {
 
     private FirebaseHelper firebaseHelper;
     private HelperClass helperClass;
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Configuration overrideConfiguration = new Configuration(newBase.getResources().getConfiguration());
+        overrideConfiguration.fontScale = 1.0f;  // Set fontScale to 1.0 to avoid scaling
+        Context context = newBase.createConfigurationContext(overrideConfiguration);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +118,7 @@ public class loginActivity extends AppCompatActivity {
                     FirebaseUser user = firebaseHelper.getCurrentUser();
                     if (user != null && user.isEmailVerified()) {
                         helperClass.startNewActivity(loginActivity.this, homeActivity.class);
+                        firebaseHelper.getUserNameToast(firebaseHelper.getCurrentUser().getUid(),loginActivity.this);
                     } else {
                         helperClass.customToast(loginActivity.this, "Email not verified. Please verify your email.");
                         helperClass.startNewActivity(loginActivity.this, verifyEmailActivity.class);
