@@ -50,5 +50,20 @@ public class User {
         this.status = status;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public void setHostelId(String hostelId) {
+        this.hostelId = hostelId;
+    }
 }
 

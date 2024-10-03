@@ -79,7 +79,7 @@ public class signupActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = firebaseHelper.getCurrentUser();
                     String uid = firebaseUser.getUid();
-                    User user = new User(name, email, phoneNum, hostelId);
+
 
                     // send email verification link
                     firebaseHelper.sendEmailVerification(firebaseUser);
@@ -90,9 +90,6 @@ public class signupActivity extends AppCompatActivity {
                     // store the data
                     firebaseHelper.storeHostelerData(uid, name, email, phoneNum, hostelId, roomNum);
 
-//                    if(!firebaseHelper.getCurrentUser().isEmailVerified()){
-//                        firebaseHelper.signOutUser();
-//                    }
                 } else {
                     helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
                     progressBar.setVisibility(View.GONE);

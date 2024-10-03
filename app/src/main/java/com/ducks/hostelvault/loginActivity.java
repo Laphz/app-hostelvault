@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -108,6 +107,7 @@ public class loginActivity extends AppCompatActivity {
                     FirebaseUser user = firebaseHelper.getCurrentUser();
                     if (user != null && user.isEmailVerified()) {
                         helperClass.startNewActivity(loginActivity.this, homeActivity.class);
+                        firebaseHelper.getUserNameToast(firebaseHelper.getCurrentUser().getUid(),loginActivity.this);
                     } else {
                         helperClass.customToast(loginActivity.this, "Email not verified. Please verify your email.");
                         helperClass.startNewActivity(loginActivity.this, verifyEmailActivity.class);

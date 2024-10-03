@@ -20,9 +20,9 @@
         app:menu="@menu/main_menu" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/contentView">
+        android:layout_height="match_parent">
 
         <!-- Main content -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,18 +74,18 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginStart="20dp"
-                            android:src="@drawable/baseline_circle_green_24"
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:id="@+id/status"
-                            android:layout_width="wrap_content"
+                            android:layout_width="150dp"
                             android:layout_height="40dp"
                             android:layout_marginStart="8dp"
+                            android:textAlignment="textStart"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:text="@string/you_are_in"
                             android:textColor="@color/white" />
+
 
                     </LinearLayout>
 
@@ -117,6 +117,7 @@
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
