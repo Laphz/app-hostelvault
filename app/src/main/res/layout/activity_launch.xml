@@ -19,9 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
@@ -34,13 +32,13 @@
         android:autoSizeTextType="uniform"
         android:fontFamily="@font/poppins_semibold"
         android:text="Welcome !"
-        android:textColor="#8692f7"
+        android:textColor="@color/black"
         android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.654" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -58,14 +56,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/launchLogin"
+            style="@style/Theme.Hostelvault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:autoSizeMaxTextSize="28sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:background="@drawable/btn_bg"
-            android:backgroundTint="@color/lavender"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:text="@string/login"
@@ -80,6 +80,8 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/launchRegister"
@@ -103,6 +105,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="or"
                 android:textColor="@color/black"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/divider2"
                 app:layout_constraintStart_toEndOf="@+id/divider1"
@@ -122,8 +125,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/launchRegister"
+            style="@style/Theme.Hostelvault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:autoSizeMaxTextSize="28sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="1sp"
@@ -133,7 +139,7 @@
             android:gravity="center"
             android:text="@string/register"
             android:textAllCaps="true"
-            android:textColor="@color/lavender"
+            android:textColor="@color/dark_teal"
             android:textSize="28sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
