@@ -46,9 +46,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.code.scanner)
     implementation(libs.circleimageview)
-    implementation(libs.library)
-
-
-
+//    implementation(libs.library)
 
 }
