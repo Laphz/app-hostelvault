@@ -22,8 +22,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="150dp"
-        android:layout_marginTop="50dp"
         android:layout_height="150dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/picsart"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
@@ -39,7 +39,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="100dp"
         android:gravity="start"
         android:orientation="vertical"
         android:padding="20dp"
@@ -50,40 +50,54 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <TextView
-            android:id="@+id/logintv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="@string/sign_in"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="36sp">
+        <!--        <TextView-->
+        <!--            android:id="@+id/logintv"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:fontFamily="@font/poppins_semibold"-->
+        <!--            android:text="@string/sign_in"-->
+        <!--            android:textAllCaps="true"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:textSize="36sp">-->
 
-        </TextView>
+        <!--        </TextView>-->
+
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:autoSizeMaxTextSize="28sp"-->
+        <!--            android:layout_marginTop="20dp"-->
+        <!--            android:autoSizeMinTextSize="12sp"-->
+        <!--            android:autoSizeStepGranularity="1sp"-->
+        <!--            android:autoSizeTextType="uniform"-->
+        <!--            android:fontFamily="@font/poppins"-->
+        <!--            android:text="Enter Email"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:textScaleX="1">-->
+
+        <!--        </TextView>-->
 
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:textColorHint="@color/black"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginEt_email"
-                style="@style/Theme.Hostelvault"
                 android:layout_width="match_parent"
-                android:background="@drawable/btn_bg_transparent"
+                android:background="@drawable/edittextbg"
+                android:drawablePadding="15dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
                 android:autofillHints="emailAddress"
                 android:fontFamily="@font/poppins"
-                android:hint="@string/you_example_com"
+                android:drawableStart="@drawable/baseline_email_24"
                 android:includeFontPadding="true"
                 android:inputType="text"
                 android:paddingStart="15dp"
+                android:hint="@string/enter_email"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="15sp"
@@ -94,11 +108,30 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:autoSizeMaxTextSize="28sp"-->
+        <!--            android:layout_marginTop="20dp"-->
+        <!--            android:autoSizeMinTextSize="12sp"-->
+        <!--            android:autoSizeStepGranularity="1sp"-->
+        <!--            android:autoSizeTextType="uniform"-->
+        <!--            android:fontFamily="@font/poppins"-->
+        <!--            android:text="Enter Password"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:textScaleX="1">-->
+
+        <!--        </TextView>-->
+
+        <View
+            android:id="@+id/divid1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#505F5F5F" />
+
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:textColorHint="@color/black"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/black">
@@ -106,14 +139,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginET_pwd"
                 android:layout_width="match_parent"
-                style="@style/Theme.Hostelvault"
+                android:background="@drawable/edittextbg"
+                android:drawablePadding="15dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/btn_bg_transparent"
-                android:layout_marginTop="10dp"
                 android:autofillHints="password"
+                android:drawableStart="@drawable/baseline_lock_24"
                 android:fontFamily="@font/poppins"
-                android:hint="@string/enter_password"
                 android:includeFontPadding="true"
+                android:hint="@string/enter_password"
                 android:inputType="textPassword"
                 android:paddingStart="15dp"
                 android:textColor="@color/black"
@@ -125,55 +158,63 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <View
+            android:id="@+id/divid2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#505F5F5F" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:layout_gravity="center"
-
             android:orientation="horizontal">
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/rememberME"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:buttonIconTint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.428">
+            <!--            <com.google.android.material.checkbox.MaterialCheckBox-->
+            <!--                android:id="@+id/rememberME"-->
+            <!--                android:layout_width="20dp"-->
+            <!--                android:layout_height="20dp"-->
+            <!--                app:buttonIconTint="@color/white"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="0.0"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="0.428">-->
 
-            </com.google.android.material.checkbox.MaterialCheckBox>
+            <!--            </com.google.android.material.checkbox.MaterialCheckBox>-->
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:autoSizeMaxTextSize="28sp"
-                android:autoSizeMinTextSize="12sp"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeTextType="uniform"
-                android:fontFamily="@font/poppins"
-                android:text="@string/remember_me"
-                android:textColor="@color/black"
-                android:textFontWeight="500"
-                android:textScaleX="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.135"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView4"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_marginTop="12dp"-->
+            <!--                android:layout_marginBottom="12dp"-->
+            <!--                android:autoSizeMaxTextSize="28sp"-->
+            <!--                android:autoSizeMinTextSize="12sp"-->
+            <!--                android:autoSizeStepGranularity="1sp"-->
+            <!--                android:autoSizeTextType="uniform"-->
+            <!--                android:fontFamily="@font/poppins"-->
+            <!--                android:text="@string/remember_me"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textFontWeight="500"-->
+            <!--                android:textScaleX="1"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="0.135"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="0.0">-->
 
-            </TextView>
+            <!--            </TextView>-->
 
             <TextView
                 android:id="@+id/forgotpwd"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
                 android:autoSizeMaxTextSize="28sp"
                 android:autoSizeMinTextSize="12sp"
                 android:autoSizeStepGranularity="1sp"
@@ -217,41 +258,53 @@
         </com.google.android.material.button.MaterialButton>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="horizontal">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:text="@string/not_yet_registered"
-                android:textColor="@color/black"
-                android:textSize="12sp">
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="@string/not_yet_registered"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="12sp">-->
 
-            </TextView>
+        <!--            </TextView>-->
 
-            <TextView
-                android:id="@+id/loginIntosignup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:fontFamily="@font/poppins"
-                android:text="Sign Up"
-                android:textColor="@color/blue"
-                android:textSize="12sp">
+        <!--            <TextView-->
+        <!--                android:id="@+id/loginIntosignup"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginLeft="5dp"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="Sign Up"-->
+        <!--                android:textColor="@color/blue"-->
+        <!--                android:textSize="12sp">-->
 
-            </TextView>
+        <!--            </TextView>-->
 
 
-        </LinearLayout>
+        <!--        </LinearLayout>-->
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progressbarSignin"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
+    </ProgressBar>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
