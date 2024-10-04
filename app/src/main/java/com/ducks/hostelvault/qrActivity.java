@@ -1,12 +1,16 @@
-
 package com.ducks.hostelvault;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -137,9 +141,6 @@ public class qrActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     // Method to update status in the database
     private void updateStatus(String userName,String hostelId) {
         DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference(STATUS_DB_PATH + "/" +hostelId).child(userName);
@@ -154,16 +155,50 @@ public class qrActivity extends AppCompatActivity {
                     String currentStatus = statusSnapshot.getValue(String.class);
                     String newStatus = (currentStatus == null || currentStatus.equals("IN")) ? "OUT" : "IN";
 
+                    if (newStatus.equals("OUT")){
+
+                        Dialog dialog = new Dialog(qrActivity.this);
+                        dialog.setContentView(R.layout.reason_dialog);
+                        dialog.setCancelable(false);
+                        EditText reason = dialog.findViewById(R.id.reason);
+                        Button sumbitBtn = dialog.findViewById(R.id.reasonSubmit);
+                        sumbitBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(!TextUtils.isEmpty(reason.getText().toString().trim())){
+                                    dialog.dismiss();
+                                    statusRef.setValue(newStatus).addOnCompleteListener(updateTask -> {
+                                        if (updateTask.isSuccessful()) {
+                                            helperClass.customToast(qrActivity.this, "User: " + userName + " is now " + newStatus + "!");
+                                            helperClass.startNewActivity(qrActivity.this, homeActivity.class);
+                                        } else {
+                                            logError("Failed to update status: " + updateTask.getException());
+                                            helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
+                                        }
+                                    });
+                                }
+                                else {
+                                    reason.setError("Reason Required");
+                                }
+                            }
+                        });
+
+                        dialog.show();
+                    }
+                    else {
+                        statusRef.setValue(newStatus).addOnCompleteListener(updateTask -> {
+                            if (updateTask.isSuccessful()) {
+                                helperClass.customToast(qrActivity.this, "User: " + userName + " is now " + newStatus + "!");
+                                helperClass.startNewActivity(qrActivity.this, homeActivity.class);
+                            } else {
+                                logError("Failed to update status: " + updateTask.getException());
+                                helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
+                            }
+                        });
+                    }
+
                     // Update the status in the database
-                    statusRef.setValue(newStatus).addOnCompleteListener(updateTask -> {
-                        if (updateTask.isSuccessful()) {
-                            helperClass.customToast(qrActivity.this, "User: " + userName + " is now " + newStatus + "!!");
-                            helperClass.startNewActivity(qrActivity.this, homeActivity.class);
-                        } else {
-                            logError("Failed to update status: " + updateTask.getException());
-                            helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
-                        }
-                    });
+
                 } else {
                     // User does not exist, create a new entry with default status "OUT"
                     statusRef.setValue("OUT").addOnCompleteListener(createTask -> {
@@ -182,8 +217,6 @@ public class qrActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     public void checkCameraPermission() {
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);

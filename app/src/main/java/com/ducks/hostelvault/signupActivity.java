@@ -85,7 +85,7 @@ public class signupActivity extends AppCompatActivity {
                     firebaseHelper.sendEmailVerification(firebaseUser);
 
                     helperClass.customToast(signupActivity.this,"Signed Up successfully! Please verify your email.");
-                    helperClass.progressbar(signupActivity.this);
+//                    helperClass.progressbar(signupActivity.this);
                     // check email verification
                     helperClass.startNewActivity(signupActivity.this, verifyEmailActivity.class);
 
