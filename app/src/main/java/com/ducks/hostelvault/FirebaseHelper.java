@@ -64,8 +64,6 @@ public class FirebaseHelper {
         }
     }
 
-
-
     // Define a callback interface
     public interface RoomSizeCallback {
         void onCallback(Integer roomSize); // Callback to handle room size
@@ -187,7 +185,7 @@ public class FirebaseHelper {
 
     // get userName
     public void getUserName(String userId, final userNameCallback callback){
-        firestore.collection("hostelers").document(userId).get()
+        firestore.document("hostelers/" + userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -211,8 +209,6 @@ public class FirebaseHelper {
     public interface userNameCallback {
         void onCallback(String userName);
     }
-
-
 
     // Sign out the user
     public void signOutUser() {
