@@ -26,13 +26,10 @@ public class FirebaseHelper {
     private String roomId, hostel_id;
     private HelperClass helperClass;
 
-
-
     public FirebaseHelper() {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
     }
-
 
     // Custom listener interface for hostel ID fetching
     public interface OnHostelCodeFetchedListener {
@@ -46,7 +43,7 @@ public class FirebaseHelper {
     }
 
     // Get the current user
-    public FirebaseUser getCurrentUser() {
+    public FirebaseUser getCurrentUser(){
         return firebaseAuth.getCurrentUser();
     }
 

@@ -47,7 +47,4 @@ dependencies {
     implementation(libs.code.scanner)
     implementation(libs.circleimageview)
 
-
-
-
 }
