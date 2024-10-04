@@ -26,9 +26,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/boarder"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reason"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
@@ -49,6 +51,7 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/reasonSubmit"
                 style="@style/Theme.Hostelvault"
                 android:layout_width="0dp"
                 android:layout_weight="1"
