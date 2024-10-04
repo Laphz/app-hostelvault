@@ -30,7 +30,6 @@ public class loginActivity extends AppCompatActivity {
     private TextView forgotPwd;
     private Button loginButton;
     private CheckBox rememberMe;
-    private ProgressBar progressBar;
 
     private FirebaseHelper firebaseHelper;
     private HelperClass helperClass;
@@ -55,7 +54,7 @@ public class loginActivity extends AppCompatActivity {
         forgotPwd = findViewById(R.id.forgotpwd);
         loginButton = findViewById(R.id.button);
         rememberMe = findViewById(R.id.rememberME);
-        progressBar = findViewById(R.id.progressbarSignin);
+//        progressBar = findViewById(R.id.progressbarSignin);
 
         // Initialize helper classes
         firebaseHelper = new FirebaseHelper();
@@ -72,9 +71,7 @@ public class loginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
-
                 if (validateFields(email, password)) {
-                    progressBar.setVisibility(View.VISIBLE);
                     loginUser(email, password);
                 }
             }
@@ -113,18 +110,21 @@ public class loginActivity extends AppCompatActivity {
         firebaseHelper.signInUser(email, password, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     FirebaseUser user = firebaseHelper.getCurrentUser();
-                    if (user != null && user.isEmailVerified()) {
-                        helperClass.startNewActivity(loginActivity.this, homeActivity.class);
-                        firebaseHelper.getUserNameToast(firebaseHelper.getCurrentUser().getUid(),loginActivity.this);
-                    } else {
-                        helperClass.customToast(loginActivity.this, "Email not verified. Please verify your email.");
-                        helperClass.startNewActivity(loginActivity.this, verifyEmailActivity.class);
-//                        firebaseHelper.signOutUser();
+                    if (user != null) {
+                        if (user.isEmailVerified()) {
+                            // Email is verified, proceed to home activity
+                            helperClass.startNewActivity(loginActivity.this, homeActivity.class);
+                            firebaseHelper.getUserNameToast(user.getUid(), loginActivity.this);
+                        } else {
+                            // Email not verified, redirect to verifyEmailActivity
+                            helperClass.customToast(loginActivity.this, "Email not verified. Please verify your email.");
+                            helperClass.startNewActivity(loginActivity.this, verifyEmailActivity.class);
+                        }
                     }
                 } else {
+                    // Handle Firebase Auth exceptions here
                     handleFirebaseAuthException(task.getException());
                 }
             }
@@ -145,6 +145,7 @@ public class loginActivity extends AppCompatActivity {
 
         if (exception instanceof FirebaseAuthInvalidUserException) {
             helperClass.customToast(this, "User does not exist. Please sign up.");
+            helperClass.startNewActivity(loginActivity.this,verifyEmailActivity.class);
         } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
             helperClass.customToast(this, "Invalid credentials. Please check your email and password.");
         } else if (exception instanceof FirebaseAuthUserCollisionException) {

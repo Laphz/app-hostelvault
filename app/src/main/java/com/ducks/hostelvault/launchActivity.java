@@ -1,5 +1,7 @@
 package com.ducks.hostelvault;
 
+import static com.ducks.hostelvault.R.layout.activity_launch;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,10 +23,11 @@ public class launchActivity extends AppCompatActivity {
         super.attachBaseContext(context);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launch);
+        setContentView(activity_launch);
 
         // Initialize helper classes
         firebaseHelper = new FirebaseHelper();
