@@ -53,7 +53,7 @@ public class loginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.loginET_pwd);
         forgotPwd = findViewById(R.id.forgotpwd);
         loginButton = findViewById(R.id.button);
-        rememberMe = findViewById(R.id.rememberME);
+//        rememberMe = findViewById(R.id.rememberME);
 //        progressBar = findViewById(R.id.progressbarSignin);
 
         // Initialize helper classes
