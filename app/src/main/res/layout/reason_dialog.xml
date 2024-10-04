@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/edittextbg"
     app:cardCornerRadius="24dp"
     app:cardElevation="24dp">
 
@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:background="@color/white"
         android:orientation="vertical"
         android:padding="20dp">
 
@@ -19,19 +20,19 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
             android:text="Exit Story?"
-            android:textSize="32sp">
+            android:textSize="24sp">
 
         </TextView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/boarder"
+            android:layout_marginTop="20dp"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/reason"
                 android:layout_width="match_parent"
+                android:id="@+id/reason"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
 
@@ -51,12 +52,13 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/reasonSubmit"
                 style="@style/Theme.Hostelvault"
                 android:layout_width="0dp"
+                android:id="@+id/reasonSubmit"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:background="@drawable/btn_bg"
                 android:text="Submit">
@@ -72,3 +74,4 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
