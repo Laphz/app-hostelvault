@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class homeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    static final float END_SCALE = 0.7f;
+    static final float END_SCALE = 0.5f;
     ImageButton redirectToQr;
     TextView status;
     ImageView indicator;
@@ -71,8 +71,6 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
 
         // show drawer
         showNavigation();
-
-
 
     }
 
@@ -117,7 +115,7 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
             return true;
         } else if (itemId == R.id.logout) {
             firebaseHelper.signOutUser();
-            helperClass.startNewActivity(homeActivity.this, launchActivity.class);
+            helperClass.startFreshActivity(homeActivity.this, launchActivity.class);
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         } else {
@@ -128,18 +126,16 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     // Animate the drawer
     private void animateNavigationDrawer() {
         drawerLayout.setScrimColor(Color.TRANSPARENT);
-
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 final float rotationAngle = -10 * slideOffset;
-                contentView.setPivotX(contentView.getWidth() * 0.5f);
-                contentView.setPivotY(contentView.getHeight() * 0.5f);
+                contentView.setPivotX(contentView.getWidth() * END_SCALE);
+                contentView.setPivotY(contentView.getHeight() * END_SCALE);
                 contentView.setRotationY(rotationAngle);
-                contentView.setAlpha(1 - (slideOffset * 0.5f));
-                contentView.setTranslationX(drawerView.getWidth() * slideOffset * 0.5f);
+                contentView.setAlpha(1 - (slideOffset * END_SCALE));
+                contentView.setTranslationX(drawerView.getWidth() * slideOffset * END_SCALE);
             }
-
             @Override
             public void onDrawerClosed(View drawerView) {
                 contentView.setRotationY(0);
@@ -153,7 +149,6 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
 
     // Fetch user name and status
     private void fetchUserNameAndStatus() {
-
         String userId = firebaseHelper.getCurrentUser().getUid();
         firebaseHelper.getHostelId(userId, new FirebaseHelper.hostelIdCallback() {
             @Override
@@ -176,7 +171,6 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     // Fetch user status using the username
     private void fetchUserStatusByUsername(String userName,String hostelId) {
         DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("status/" + hostelId).child(userName);
-
         statusRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -203,6 +197,6 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void redirectToQr() {
-        redirectToQr.setOnClickListener(v -> helperClass.startFreshActivity(homeActivity.this, qrActivity.class));
+        redirectToQr.setOnClickListener(v -> helperClass.startNewActivity(homeActivity.this, qrActivity.class));
     }
 }

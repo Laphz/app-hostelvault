@@ -21,7 +21,6 @@ public class verifyEmailActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private HelperClass helperClass;
     private FirebaseHelper mAuth;
-    private ProgressBar progressBar;
     private Button verifyBtn, resendEmailBtn;
     private Handler handler;
     private final int EMAIL_CHECK_INTERVAL = 5000; // 5 seconds
@@ -45,11 +44,11 @@ public class verifyEmailActivity extends AppCompatActivity {
 
         if (currentUser == null) {
             Toast.makeText(this, "No user is currently signed in.", Toast.LENGTH_SHORT).show();
-            redirectToHomeActivity();
+            redirectToLaunchActivity();
             return;
         }
 
-        progressBar = findViewById(R.id.progressBar);
+
         verifyBtn = findViewById(R.id.verifybtn);
 //        resendEmailBtn = findViewById(R.id.resendEmailBtn);
 
@@ -149,6 +148,11 @@ public class verifyEmailActivity extends AppCompatActivity {
     private void redirectToHomeActivity() {
         handler.removeCallbacksAndMessages(null); // Stop email check
         helperClass.startFreshActivity(verifyEmailActivity.this, homeActivity.class);
+    }
+
+    private void redirectToLaunchActivity() {
+        handler.removeCallbacksAndMessages(null); // Stop email check
+        helperClass.startFreshActivity(verifyEmailActivity.this, launchActivity.class);
     }
 
     @Override
