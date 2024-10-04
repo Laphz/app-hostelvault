@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.Toast;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class HelperClass {
     public void showAlertEmailVerification(Context currentActivity){
         AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
@@ -74,7 +76,7 @@ public class HelperClass {
 
     // prograss bar
     public void progressbar(Context currentActivity){
-        alertDialog dialog = new alertDialog(currentActivity, alertDialog.PROGRESS_TYPE);
+        SweetAlertDialog dialog = new SweetAlertDialog(currentActivity, SweetAlertDialog.PROGRESS_TYPE);
         dialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         dialog.setTitleText("Loading");
         dialog.setCancelable(false);

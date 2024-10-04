@@ -84,11 +84,15 @@ public class signupActivity extends AppCompatActivity {
                     // send email verification link
                     firebaseHelper.sendEmailVerification(firebaseUser);
 
+                    helperClass.customToast(signupActivity.this,"Signed Up successfully! Please verify your email.");
+                    helperClass.progressbar(signupActivity.this);
                     // check email verification
                     helperClass.startNewActivity(signupActivity.this, verifyEmailActivity.class);
 
                     // store the data
                     firebaseHelper.storeHostelerData(uid, name, email, phoneNum, hostelId, roomNum);
+
+
 
                 } else {
                     helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
