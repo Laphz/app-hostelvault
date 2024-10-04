@@ -76,7 +76,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            style="@style/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/black"
@@ -85,6 +85,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginEt_email"
                 android:layout_width="match_parent"
+                style="@style/black"
                 android:layout_height="match_parent"
                 android:autofillHints="emailAddress"
                 android:background="@drawable/edittextbg"
@@ -127,16 +128,19 @@
             android:background="#505F5F5F" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:textColorHint="@color/black"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/black">
+            app:passwordToggleTint="#ABABAB">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginET_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                style="@style/black"
                 android:autofillHints="password"
                 android:background="@drawable/edittextbg"
                 android:drawableStart="@drawable/baseline_lock_24"
