@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hostelvault"
         tools:targetApi="31">
+      
         <activity
             android:name=".verifyEmailActivity"
             android:exported="false" />
