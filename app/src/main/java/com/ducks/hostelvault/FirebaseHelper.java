@@ -26,13 +26,10 @@ public class FirebaseHelper {
     private String roomId, hostel_id;
     private HelperClass helperClass;
 
-
-
     public FirebaseHelper() {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
     }
-
 
     // Custom listener interface for hostel ID fetching
     public interface OnHostelCodeFetchedListener {
@@ -46,7 +43,7 @@ public class FirebaseHelper {
     }
 
     // Get the current user
-    public FirebaseUser getCurrentUser() {
+    public FirebaseUser getCurrentUser(){
         return firebaseAuth.getCurrentUser();
     }
 
@@ -63,8 +60,6 @@ public class FirebaseHelper {
                     });
         }
     }
-
-
 
     // Define a callback interface
     public interface RoomSizeCallback {
@@ -187,7 +182,7 @@ public class FirebaseHelper {
 
     // get userName
     public void getUserName(String userId, final userNameCallback callback){
-        firestore.collection("hostelers").document(userId).get()
+        firestore.document("hostelers/" + userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -211,8 +206,6 @@ public class FirebaseHelper {
     public interface userNameCallback {
         void onCallback(String userName);
     }
-
-
 
     // Sign out the user
     public void signOutUser() {
