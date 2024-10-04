@@ -48,5 +48,4 @@ dependencies {
     implementation(libs.circleimageview)
 //    implementation(libs.library)
 
-
 }
