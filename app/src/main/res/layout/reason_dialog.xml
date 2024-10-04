@@ -5,13 +5,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/edittextbg"
     app:cardCornerRadius="24dp"
-    app:cardElevation="24dp">
+    app:cardElevation="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edittextbg"
         android:gravity="center"
-        android:background="@color/white"
         android:orientation="vertical"
         android:padding="20dp">
 
@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
             android:text="Exit Story?"
-            android:textSize="24sp">
+            android:textColor="@color/black"
+            android:textSize="28sp">
 
         </TextView>
 
@@ -31,8 +32,9 @@
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
                 android:id="@+id/reason"
+                android:layout_width="match_parent"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
 
@@ -42,9 +44,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
 
             <View
                 android:layout_width="0dp"
@@ -52,23 +54,23 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/reasonSubmit"
                 style="@style/Theme.Hostelvault"
                 android:layout_width="0dp"
-                android:id="@+id/reasonSubmit"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:layout_marginTop="25dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:background="@drawable/btn_bg"
-                android:text="Submit">
+                android:fontFamily="@font/poppins"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="20sp">
 
             </com.google.android.material.button.MaterialButton>
 
 
-
         </LinearLayout>
-
 
 
     </LinearLayout>
