@@ -16,16 +16,14 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="32dp"
         android:layout_marginLeft="32dp"
-        app:cardCornerRadius="17dp"
-        app:cardElevation="24dp"
-        android:background="@drawable/boarder"
-        app:cardBackgroundColor="@android:color/transparent">
+        app:cardCornerRadius="40dp"
+        app:cardElevation="24dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/boarder"
+            android:background="@drawable/edittextbg"
             android:gravity="start"
             android:orientation="vertical"
             android:padding="20dp">
