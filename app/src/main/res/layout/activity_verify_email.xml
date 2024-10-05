@@ -11,14 +11,14 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="24dp"
+        app:cardCornerRadius="45dp"
         app:cardElevation="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:gravity="start"
-            android:padding="24dp"
+            android:padding="30dp"
             android:background="@drawable/edittextbg"
             android:layout_height="match_parent">
 
@@ -28,6 +28,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/verify_your_email"
                 android:textSize="30sp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +42,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="Your registered Email is not verified please verify and login."
                 android:textAlignment="textStart"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
             <LinearLayout

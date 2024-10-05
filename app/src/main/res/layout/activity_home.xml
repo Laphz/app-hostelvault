@@ -106,8 +106,8 @@
 
         <ImageButton
             android:id="@+id/redirectToQr"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/custom_imgbtn"
