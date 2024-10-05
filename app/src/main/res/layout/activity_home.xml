@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
                 android:background="@drawable/boarder"
+                app:cardBackgroundColor="#3F51B5"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,8 +72,8 @@
 
                         <ImageView
                             android:id="@+id/indicator"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:layout_marginStart="20dp"
                             tools:ignore="ContentDescription" />
 
@@ -81,9 +82,12 @@
                             android:layout_width="150dp"
                             android:layout_height="40dp"
                             android:layout_marginStart="8dp"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp"
                             android:textAlignment="textStart"
                             android:fontFamily="@font/poppins_semibold"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/lavender" />
 
 
                     </LinearLayout>

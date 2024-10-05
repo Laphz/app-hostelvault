@@ -12,6 +12,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -24,7 +27,8 @@ public class FirebaseHelper {
     private FirebaseFirestore firestore;
     private static final String TAG = "FirebaseHelper";
     private String roomId, hostel_id;
-    private HelperClass helperClass;
+    private HelperClass helperClass = new HelperClass();
+
 
     public FirebaseHelper() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -248,4 +252,46 @@ public class FirebaseHelper {
                 .addOnCompleteListener(onCompleteListener)
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to send password reset email: ", e));
     }
+
+
+    // checking weather the user exists in logs/hostelId
+    public void checkUserInLogs(String userUid, CheckUserCallback callback) {
+        getHostelId(userUid, new hostelIdCallback() {
+            @Override
+            public void onCallback(String hostelId) {
+                if (hostelId != null) {
+                    DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("logs/" + hostelId).child(userUid);
+                    statusRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DataSnapshot statusSnapshot = task.getResult();
+                                // Check if the user ID exists in the logs
+                                if (statusSnapshot.exists()) {
+                                    // User exists in logs, invoke the callback with true
+                                    callback.onResult(true);
+                                } else {
+                                    // User does not exist, invoke the callback with false
+                                    callback.onResult(false);
+                                }
+                            } else {
+                                Log.e("FetchUserStatus", "Error getting user status: " + task.getException());
+                                // Handle the error case
+                                callback.onResult(false); // Assuming user does not exist in case of error
+                            }
+                        }
+                    });
+                } else {
+                    // Handle case where hostelId is null
+                    callback.onResult(false);
+                }
+            }
+        });
+    }
+
+    public interface CheckUserCallback {
+        void onResult(boolean exists);
+    }
+
+
 }
