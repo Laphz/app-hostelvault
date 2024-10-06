@@ -7,13 +7,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/white"
+    android:background="@drawable/smallactivity_bg"
     tools:context=".forgotPasswrd">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         app:cardElevation="20dp">
 
         <LinearLayout
