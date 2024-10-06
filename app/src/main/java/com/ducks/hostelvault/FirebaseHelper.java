@@ -1,6 +1,7 @@
 package com.ducks.hostelvault;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,7 +95,7 @@ public class FirebaseHelper {
         });
     }
 
-    private void fetchHostel(FirebaseFirestore db, String hostelId, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
+    public void fetchHostel(FirebaseFirestore db, String hostelId, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
         db.collection("hostels").document(hostelId)
                 .get()
                 .addOnSuccessListener(onSuccess)
@@ -253,7 +255,6 @@ public class FirebaseHelper {
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to send password reset email: ", e));
     }
 
-
     // checking weather the user exists in logs/hostelId
     public void checkUserInLogs(String userUid, CheckUserCallback callback) {
         getHostelId(userUid, new hostelIdCallback() {
@@ -293,5 +294,24 @@ public class FirebaseHelper {
         void onResult(boolean exists);
     }
 
+    // Method to check if a hostel exists
+    public Task<Boolean> doesHostelExist(String hostelId) {
+        TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
+
+        firestore.collection("hostels").document(hostelId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        taskCompletionSource.setResult(true);  // Hostel exists
+                    } else {
+                        taskCompletionSource.setResult(false); // Hostel does not exist
+                    }
+                })
+                .addOnFailureListener(taskCompletionSource::setException);
+
+        return taskCompletionSource.getTask();
+    }
+
 
 }
+

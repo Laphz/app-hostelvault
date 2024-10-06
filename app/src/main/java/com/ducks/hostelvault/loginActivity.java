@@ -29,7 +29,6 @@ public class loginActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private TextView forgotPwd;
     private Button loginButton;
-    private CheckBox rememberMe;
     private FirebaseHelper firebaseHelper;
     private HelperClass helperClass;
 
@@ -52,8 +51,7 @@ public class loginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.loginET_pwd);
         forgotPwd = findViewById(R.id.forgotpwd);
         loginButton = findViewById(R.id.button);
-//        rememberMe = findViewById(R.id.rememberME);
-//        progressBar = findViewById(R.id.progressbarSignin);
+
 
         // Initialize helper classes
         firebaseHelper = new FirebaseHelper();

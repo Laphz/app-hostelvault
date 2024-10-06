@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class qrActivity extends AppCompatActivity {
+public class qrActivity extends BaseActivity {
 
     private CodeScanner scanner;
     private static final int CAMERA_REQUEST_CODE = 101;
@@ -65,6 +65,7 @@ public class qrActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
+
 
         // helper class
         firebaseHelper = new FirebaseHelper();

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +34,7 @@ public class signupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
 
         editTextName = findViewById(R.id.et_name);
         editTextEmail = findViewById(R.id.et_email);
@@ -66,37 +66,40 @@ public class signupActivity extends AppCompatActivity {
         String hostelId = editTextHostelId.getText().toString().trim();
         String roomNum = editTextRoomNum.getText().toString().trim();
 
+        EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone, editTextHostelId, editTextRoomNum};
 
-        EditText[] inputFields = {editTextName, editTextEmail, editTextPassword, editTextConfirmPassword, editTextPhone};
-
-        if (!inputValidator.validateInputs(email, password, confirmPassword, phoneNum, inputFields)) {
-            return;
-        }
-        firebaseHelper.signUpUser(email, password, new OnCompleteListener<AuthResult>() {
+        // Use the InputValidator's validateInputs method with callbacks
+        inputValidator.validateInputs(email, password, confirmPassword, phoneNum, hostelId, inputFields, new InputValidator.OnValidationListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser firebaseUser = firebaseHelper.getCurrentUser();
-                    String uid = firebaseUser.getUid();
+            public void onValidationSuccess() {
+                // Proceed with registration since inputs are valid and hostel exists
+                firebaseHelper.signUpUser(email, password, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser firebaseUser = firebaseHelper.getCurrentUser();
+                            String uid = firebaseUser.getUid();
 
+                            // Send email verification link
+                            firebaseHelper.sendEmailVerification(firebaseUser);
 
-                    // send email verification link
-                    firebaseHelper.sendEmailVerification(firebaseUser);
+                            helperClass.customToast(signupActivity.this, "Signed Up successfully! Please verify your email.");
+                            // Check email verification
+                            helperClass.startNewActivity(signupActivity.this, verifyEmailActivity.class);
 
-                    helperClass.customToast(signupActivity.this,"Signed Up successfully! Please verify your email.");
-//                    helperClass.progressbar(signupActivity.this);
-                    // check email verification
-                    helperClass.startNewActivity(signupActivity.this, verifyEmailActivity.class);
+                            // Store the data
+                            firebaseHelper.storeHostelerData(uid, name, email, phoneNum, hostelId, roomNum);
+                        } else {
+                            helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
+                        }
+                    }
+                });
+            }
 
-                    // store the data
-                    firebaseHelper.storeHostelerData(uid, name, email, phoneNum, hostelId, roomNum);
-
-
-
-                } else {
-                    helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
-
-                }
+            @Override
+            public void onValidationFailed() {
+                // Handle validation failure
+                helperClass.showErrorToast(signupActivity.this, "Validation failed. Please check the input fields.");
             }
         });
     }

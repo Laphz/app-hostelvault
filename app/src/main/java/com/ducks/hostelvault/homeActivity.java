@@ -18,7 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class homeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class homeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final float END_SCALE = 0.5f;
     ImageButton redirectToQr;
@@ -44,6 +44,8 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
 
         redirectToQr = findViewById(R.id.redirectToQr);
         indicator = findViewById(R.id.indicator);
