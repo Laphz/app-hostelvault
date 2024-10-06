@@ -17,7 +17,8 @@
         android:layout_marginRight="32dp"
         android:layout_marginLeft="32dp"
         app:cardCornerRadius="40dp"
-        app:cardElevation="24dp">
+        app:cardElevation="24dp"
+        tools:ignore="ObsoleteLayoutParam">
 
 
         <LinearLayout
@@ -123,7 +124,8 @@
                     android:hint="Hostel Id"
                     android:textColor="@color/black"
                     android:textColorHint="@color/grey"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +149,8 @@
                     android:hint="Room Number"
                     android:textColor="@color/black"
                     android:textColorHint="@color/grey"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
