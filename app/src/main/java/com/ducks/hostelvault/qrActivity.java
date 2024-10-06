@@ -27,10 +27,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
 
-public class qrActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+
+public class qrActivity extends BaseActivity {
 
     private CodeScanner scanner;
     private static final int CAMERA_REQUEST_CODE = 101;
@@ -41,7 +51,7 @@ public class qrActivity extends AppCompatActivity {
 
     // Constants for database paths
     private static final String ADMIN_DB_PATH = "qrs";
-    private static final String STATUS_DB_PATH = "status";
+    private static final String STATUS_DB_PATH = "logs";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -55,6 +65,7 @@ public class qrActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
+
 
         // helper class
         firebaseHelper = new FirebaseHelper();
@@ -92,131 +103,131 @@ public class qrActivity extends AppCompatActivity {
     // Method to check if QR matches the database and update status
     public void matchQr(String scannedValue) {
         String userUid = firebaseHelper.getCurrentUser().getUid();
-        firebaseHelper.getHostelId(userUid, new FirebaseHelper.hostelIdCallback() {
+        getHostelIdAndCheckQr(userUid, scannedValue);
+    }
+
+    private void getHostelIdAndCheckQr(String userUid, String scannedValue) {
+        firebaseHelper.getHostelId(userUid, hostelId -> {
+            if (hostelId == null) {
+                helperClass.customToast(qrActivity.this, "Hostel not found login again");
+                helperClass.startFreshActivity(qrActivity.this, loginActivity.class);
+            } else {
+                checkQrCode(scannedValue, hostelId, userUid);
+            }
+        });
+    }
+
+    private void checkQrCode(String scannedValue, String hostelId, String userUid) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(ADMIN_DB_PATH);
+        ref.orderByValue().equalTo(scannedValue).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onCallback(String hostelId) {
-                if (hostelId != null) {
-                    // Once the hostelId is retrieved, proceed with the query
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(ADMIN_DB_PATH);
-                    Query checkQr = ref.orderByValue().equalTo(scannedValue);
-
-                    checkQr.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()) {
-                                // Handle user status change logic
-                                firebaseHelper.getUserName(userUid, new FirebaseHelper.userNameCallback() {
-                                    @Override
-                                    public void onCallback(String userName) {
-                                        if (userName != null) {
-
-                                            // Optionally call a function like changeStatusInDatabase() here
-                                            updateStatus(userName,hostelId);
-                                        }
-                                        else {
-                                            helperClass.customToast(qrActivity.this,"User not found.");
-                                        }
-
-                                    }
-                                });
-                            }
-                            else {
-                                helperClass.customToast(qrActivity.this, "No QR found.");
-                                helperClass.startNewActivity(qrActivity.this, homeActivity.class);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            logError("Database error: " + error.getMessage());
-                            helperClass.customToast(qrActivity.this, "Database error. Please try again.");
-                        }
-                    });
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    retrieveUserNameAndUpdateStatus(userUid, hostelId);
                 } else {
-                    // Handle the case where hostelId is null
-                    helperClass.customToast(qrActivity.this, "Hostel ID not found. Please try again.");
-                    helperClass.startNewActivity(qrActivity.this,homeActivity.class);
+                    helperClass.customToast(qrActivity.this, "QR not found!");
+                    helperClass.startFreshActivity(qrActivity.this, homeActivity.class);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                logError("Database error: " + error.getMessage());
+                helperClass.customToast(qrActivity.this, "Something went wrong. Please try again.");
+            }
+        });
+    }
+
+    private void retrieveUserNameAndUpdateStatus(String userUid, String hostelId) {
+        firebaseHelper.getUserName(userUid, userName -> {
+            if (userName != null) {
+                updateStatus(userName, userUid, hostelId);
+            } else {
+                helperClass.customToast(qrActivity.this, "User not found.");
             }
         });
     }
 
     // Method to update status in the database
-    private void updateStatus(String userName,String hostelId) {
-        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference(STATUS_DB_PATH + "/" +hostelId).child(userName);
+    private void updateStatus(String userName, String userUid, String hostelId) {
+        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference(STATUS_DB_PATH + "/" + hostelId + "/" + userUid);
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
+        String formattedTimestamp = sdf.format(new Date());
 
-        // Check if the user already exists in the status node
-        statusRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DataSnapshot statusSnapshot = task.getResult();
-
-                if (statusSnapshot.exists()) {
-                    // User exists, so update the status
-                    String currentStatus = statusSnapshot.getValue(String.class);
-                    String newStatus = (currentStatus == null || currentStatus.equals("IN")) ? "OUT" : "IN";
-
-                    if (newStatus.equals("OUT")){
-
-                        Dialog dialog = new Dialog(qrActivity.this);
-                        dialog.setContentView(R.layout.reason_dialog);
-                        dialog.setCancelable(false);
-                        EditText reason = dialog.findViewById(R.id.reason);
-                        Button sumbitBtn = dialog.findViewById(R.id.reasonSubmit);
-                        sumbitBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(!TextUtils.isEmpty(reason.getText().toString().trim())){
-                                    dialog.dismiss();
-                                    statusRef.setValue(newStatus).addOnCompleteListener(updateTask -> {
-                                        if (updateTask.isSuccessful()) {
-                                            helperClass.customToast(qrActivity.this, "User: " + userName + " is now " + newStatus + "!");
-                                            helperClass.startNewActivity(qrActivity.this, homeActivity.class);
-                                        } else {
-                                            logError("Failed to update status: " + updateTask.getException());
-                                            helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
-                                        }
-                                    });
-                                }
-                                else {
-                                    reason.setError("Reason Required");
-                                }
-                            }
-                        });
-
-                        dialog.show();
-                    }
-                    else {
-                        statusRef.setValue(newStatus).addOnCompleteListener(updateTask -> {
-                            if (updateTask.isSuccessful()) {
-                                helperClass.customToast(qrActivity.this, "User: " + userName + " is now " + newStatus + "!");
-                                helperClass.startNewActivity(qrActivity.this, homeActivity.class);
-                            } else {
-                                logError("Failed to update status: " + updateTask.getException());
-                                helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
-                            }
-                        });
-                    }
-
-                    // Update the status in the database
-
+        firebaseHelper.checkUserInLogs(userUid, new FirebaseHelper.CheckUserCallback() {
+            @Override
+            public void onResult(boolean exists) {
+                if (!exists) {
+                    // User does not exist, show the reason dialog
+                    showReasonDialog(userName, userUid, statusRef, formattedTimestamp);
                 } else {
-                    // User does not exist, create a new entry with default status "OUT"
-                    statusRef.setValue("OUT").addOnCompleteListener(createTask -> {
-                        if (createTask.isSuccessful()) {
-                            helperClass.customToast(qrActivity.this, userName + " is now OUT!");
-                            helperClass.startNewActivity(qrActivity.this, homeActivity.class);
-                        } else {
-                            logError("Failed to create new status entry: " + createTask.getException());
-                            helperClass.customToast(qrActivity.this, "Failed to set status for new user. Please try again.");
-                        }
-                    });
+                    // User exists, delete their status entry
+                    deleteUserNode(userUid, statusRef, userName);
                 }
-            } else {
-                logError("Error checking user status: " + task.getException());
-                helperClass.customToast(qrActivity.this, "Failed to retrieve user status.");
             }
         });
     }
+
+    private void showReasonDialog(String userName, String userUid, DatabaseReference statusRef, String formattedTimestamp) {
+        Dialog dialog = new Dialog(qrActivity.this);
+        dialog.setContentView(R.layout.reason_dialog);
+        dialog.setCancelable(false);
+
+        EditText reason = dialog.findViewById(R.id.reason);
+        Button submitBtn = dialog.findViewById(R.id.reasonSubmit);
+
+        submitBtn.setOnClickListener(v -> {
+            String reasonText = reason.getText().toString().trim();
+
+            if (!TextUtils.isEmpty(reasonText)) {
+                dialog.dismiss(); // Close the dialog when the reason is provided
+
+                // Prepare data to update in the database
+                Map<String, Object> updateData = new HashMap<>();
+                updateData.put("where", reasonText); // Update the status
+                updateData.put("timestamp", formattedTimestamp); // Add formatted timestamp
+
+                // Update the status in the database
+                updateStatusInDatabase(statusRef, userName, updateData);
+            } else {
+                reason.setError("Reason Required"); // Display error message when reason is empty
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void updateStatusInDatabase(DatabaseReference statusRef, String userName, Map<String, Object> updateData) {
+        statusRef.updateChildren(updateData).addOnCompleteListener(updateTask -> {
+            if (updateTask.isSuccessful()) {
+                helperClass.customToast(qrActivity.this, "User: " + userName + " is now OUT!");
+                helperClass.startFreshActivity(qrActivity.this, homeActivity.class);
+            } else {
+                logError("Failed to update status: " + updateTask.getException());
+                helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
+            }
+        });
+    }
+
+    private void deleteUserNode(String userUid, DatabaseReference statusRef, String userName) {
+        // Delete the user's status entry from the database
+        statusRef.removeValue().addOnCompleteListener(deleteTask -> {
+            if (deleteTask.isSuccessful()) {
+                // Optionally, you can show a message after deletion
+                helperClass.customToast(qrActivity.this, "User: " + userName + "is now IN!");
+                // You can also choose to call the method to update the status or perform any other action here
+                // E.g., you can re-invoke showReasonDialog() or handle it however you need.
+            } else {
+                logError("Failed to delete status entry: " + deleteTask.getException());
+                helperClass.customToast(qrActivity.this, "Failed to delete status. Please try again.");
+            }
+        });
+        helperClass.startFreshActivity(qrActivity.this,homeActivity.class);
+    }
+
+
+
+
 
     public void checkCameraPermission() {
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);

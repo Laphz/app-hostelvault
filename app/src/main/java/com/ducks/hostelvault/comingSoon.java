@@ -6,8 +6,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class comingSoon extends AppCompatActivity {
+public class comingSoon extends BaseActivity {
 
+    FirebaseHelper firebaseHelper = new FirebaseHelper();
     @Override
     protected void attachBaseContext(Context newBase) {
         Configuration overrideConfiguration = new Configuration(newBase.getResources().getConfiguration());
@@ -20,5 +21,6 @@ public class comingSoon extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coming_soon);
+
     }
 }

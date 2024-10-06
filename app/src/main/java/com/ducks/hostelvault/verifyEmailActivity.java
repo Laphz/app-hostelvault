@@ -24,6 +24,7 @@ public class verifyEmailActivity extends AppCompatActivity {
     private Button verifyBtn, resendEmailBtn;
     private Handler handler;
     private final int EMAIL_CHECK_INTERVAL = 5000; // 5 seconds
+    FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -50,8 +51,7 @@ public class verifyEmailActivity extends AppCompatActivity {
 
 
         verifyBtn = findViewById(R.id.verifybtn);
-//        resendEmailBtn = findViewById(R.id.resendEmailBtn);
-
+        // resendEmailBtn = findViewById(R.id.resendEmailBtn);
         // Set onClickListener to check email verification
         verifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
