@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,15 +16,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-public class homeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class homeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final float END_SCALE = 0.5f;
     ImageButton redirectToQr;
@@ -53,6 +45,8 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+
         redirectToQr = findViewById(R.id.redirectToQr);
         indicator = findViewById(R.id.indicator);
         status = findViewById(R.id.status);
@@ -63,8 +57,7 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         firebaseHelper = new FirebaseHelper();
         helperClass = new HelperClass();
 
-        // Fetch the user's username and status
-        fetchUserNameAndStatus();
+        updateStatusUI();
 
         // open scanner
         redirectToQr();
@@ -146,55 +139,18 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
 
     /*---------------------------------------------------------Status Functions-----------------------------------------------------------*/
 
-
-    // Fetch user name and status
-    private void fetchUserNameAndStatus() {
-        String userId = firebaseHelper.getCurrentUser().getUid();
-        firebaseHelper.getHostelId(userId, new FirebaseHelper.hostelIdCallback() {
+    // update status on home activity
+    private void updateStatusUI() {
+        String userUid = firebaseHelper.getCurrentUser().getUid();
+        firebaseHelper.checkUserInLogs(userUid, new FirebaseHelper.CheckUserCallback() {
             @Override
-            public void onCallback(String hostelId) {
-                firebaseHelper.getUserName(userId, new FirebaseHelper.userNameCallback() {
-                    @Override
-                    public void onCallback(String userName) {
-                        if (userName != null) {
-                            fetchUserStatusByUsername(userName,hostelId);
-                        } else {
-                            status.setText("User name not found.");
-                        }
-                    }
-                });
+            public void onResult(boolean exists) {
+                indicator.setImageResource((false == exists) ? R.drawable.baseline_circle_green_24 : R.drawable.baseline_circle_red_24);
+                status.setText((false == exists) ? "You are IN!" : "You are OUT!");
             }
         });
 
     }
-
-    // Fetch user status using the username
-    private void fetchUserStatusByUsername(String userName,String hostelId) {
-        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("status/" + hostelId).child(userName);
-        statusRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot statusSnapshot = task.getResult();
-                    String userStatus = statusSnapshot.exists() ? statusSnapshot.getValue(String.class) : "Status not found";
-
-                    // Update the UI with the fetched status
-                    updateStatusUI(userStatus);
-                } else {
-                    Log.e("FetchUserStatus", "Error getting user status: " + task.getException());
-                    status.setText("Error fetching status");
-                }
-            }
-        });
-    }
-
-
-    private void updateStatusUI(String userStatus) {
-        indicator.setImageResource("IN".equals(userStatus) ? R.drawable.baseline_circle_green_24 : R.drawable.baseline_circle_red_24);
-        status.setText("IN".equals(userStatus) ? "You are IN!!" : "You are OUT!!");
-    }
-
-
 
     private void redirectToQr() {
         redirectToQr.setOnClickListener(v -> helperClass.startNewActivity(homeActivity.this, qrActivity.class));

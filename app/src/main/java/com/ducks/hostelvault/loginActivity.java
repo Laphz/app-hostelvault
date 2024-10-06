@@ -29,8 +29,6 @@ public class loginActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private TextView forgotPwd;
     private Button loginButton;
-    private CheckBox rememberMe;
-
     private FirebaseHelper firebaseHelper;
     private HelperClass helperClass;
 
@@ -53,8 +51,7 @@ public class loginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.loginET_pwd);
         forgotPwd = findViewById(R.id.forgotpwd);
         loginButton = findViewById(R.id.button);
-//        rememberMe = findViewById(R.id.rememberME);
-//        progressBar = findViewById(R.id.progressbarSignin);
+
 
         // Initialize helper classes
         firebaseHelper = new FirebaseHelper();
@@ -115,8 +112,8 @@ public class loginActivity extends AppCompatActivity {
                     if (user != null) {
                         if (user.isEmailVerified()) {
                             // Email is verified, proceed to home activity
-                            helperClass.startNewActivity(loginActivity.this, homeActivity.class);
                             firebaseHelper.getUserNameToast(user.getUid(), loginActivity.this);
+                            helperClass.startFreshActivity(loginActivity.this, homeActivity.class);
                         } else {
                             // Email not verified, redirect to verifyEmailActivity
                             helperClass.customToast(loginActivity.this, "Email not verified. Please verify your email.");

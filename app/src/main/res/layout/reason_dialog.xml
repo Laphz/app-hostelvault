@@ -70,6 +70,7 @@
                 android:textSize="15sp"
                 tools:ignore="RtlSymmetry">
 
+
             </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -131,5 +132,7 @@
 
 </androidx.cardview.widget.CardView>
 
+
     <!--hi-->
+
 

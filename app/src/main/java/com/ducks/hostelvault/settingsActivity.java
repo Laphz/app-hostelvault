@@ -6,7 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class settingsActivity extends AppCompatActivity {
+public class settingsActivity extends BaseActivity {
+    FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -20,5 +21,7 @@ public class settingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+
     }
 }

@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
                 android:background="@drawable/boarder"
+                app:cardBackgroundColor="#3F51B5"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,10 +84,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:textSize="16sp"
-                            android:gravity="center"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp"
+                            android:textAlignment="textStart"
                             android:fontFamily="@font/poppins_semibold"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/lavender" />
 
 
                     </LinearLayout>
