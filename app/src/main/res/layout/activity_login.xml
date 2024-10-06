@@ -22,8 +22,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="150dp"
-        android:layout_marginTop="150dp"
         android:layout_height="150dp"
+        android:layout_marginTop="150dp"
         android:src="@drawable/picsart"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
@@ -84,8 +84,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginEt_email"
-                android:layout_width="match_parent"
                 style="@style/black"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="emailAddress"
                 android:background="@drawable/edittextbg"
@@ -138,9 +138,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginET_pwd"
+                style="@style/black"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                style="@style/black"
                 android:autofillHints="password"
                 android:background="@drawable/edittextbg"
                 android:drawableStart="@drawable/baseline_lock_24"
@@ -242,9 +242,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
             android:autoSizeMaxTextSize="28sp"
-            android:layout_marginTop="30dp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
