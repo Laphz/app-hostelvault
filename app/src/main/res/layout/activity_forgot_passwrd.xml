@@ -153,7 +153,7 @@
                     android:layout_marginTop="25dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bg"
-                    android:fontFamily="@font/poppins"
+                    android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
                     android:text="Reset"
                     android:textColor="@color/white"

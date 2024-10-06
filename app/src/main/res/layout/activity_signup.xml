@@ -27,7 +27,7 @@
             android:background="@drawable/edittextbg"
             android:gravity="start"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="30dp">
 
             <!-- Name Input -->
             <TextView
@@ -214,6 +214,10 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/register"
                 android:textAllCaps="true"
+                android:autoSizeMaxTextSize="28sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 
