@@ -137,10 +137,7 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
 
     /*---------------------------------------------------------Status Functions-----------------------------------------------------------*/
 
-
-
-
-
+    // update status on home activity
     private void updateStatusUI() {
         String userUid = firebaseHelper.getCurrentUser().getUid();
         firebaseHelper.checkUserInLogs(userUid, new FirebaseHelper.CheckUserCallback() {
@@ -152,8 +149,6 @@ public class homeActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
-
-
 
     private void redirectToQr() {
         redirectToQr.setOnClickListener(v -> helperClass.startNewActivity(homeActivity.this, qrActivity.class));

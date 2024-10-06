@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class signupActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextEmail, editTextPhone, editTextPassword, editTextConfirmPassword, editTextHostelId, editTextRoomNum;
-    private ProgressBar progressBar;
     private FirebaseHelper firebaseHelper;
     private InputValidator inputValidator;
     private HelperClass helperClass;
@@ -96,7 +95,7 @@ public class signupActivity extends AppCompatActivity {
 
                 } else {
                     helperClass.showErrorToast(signupActivity.this, task.getException().getMessage());
-                    progressBar.setVisibility(View.GONE);
+
                 }
             }
         });

@@ -132,7 +132,7 @@ public class qrActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 logError("Database error: " + error.getMessage());
-                helperClass.customToast(qrActivity.this, "Database error. Please try again.");
+                helperClass.customToast(qrActivity.this, "Something went wrong. Please try again.");
             }
         });
     }
