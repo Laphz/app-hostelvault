@@ -5,13 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:background="@color/white"
+    android:background="@drawable/lakalakalaka"
     android:layout_height="match_parent"
     tools:context=".verifyEmailActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         app:cardCornerRadius="45dp"
         app:cardElevation="20dp">
 

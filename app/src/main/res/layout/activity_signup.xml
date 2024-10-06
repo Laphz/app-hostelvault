@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lavender"
+    android:background="@drawable/lakalakalaka"
     android:gravity="center"
     tools:context=".signupActivity">
 
@@ -14,8 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginRight="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:strokeColor="@color/black"
         app:cardCornerRadius="40dp"
         app:cardElevation="24dp"
         tools:ignore="ObsoleteLayoutParam">
@@ -225,8 +226,5 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-
-
 
 </LinearLayout>

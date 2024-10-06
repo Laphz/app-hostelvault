@@ -5,6 +5,8 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:background="@drawable/edittextbg"
     app:cardCornerRadius="45dp"
     app:cardElevation="20dp">

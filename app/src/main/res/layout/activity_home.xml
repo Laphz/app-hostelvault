@@ -33,9 +33,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="380dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="80dp"
+                android:layout_marginRight="20dp"
                 android:background="@drawable/boarder"
                 app:cardBackgroundColor="#3F51B5"
                 app:cardCornerRadius="15dp"
@@ -48,9 +50,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
                     android:background="@drawable/boarder"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -66,7 +68,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="15dp"
                         android:gravity="center"
                         android:orientation="horizontal"
@@ -84,12 +85,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
                             android:layout_marginTop="6dp"
-                            android:textAlignment="textStart"
                             android:fontFamily="@font/poppins_semibold"
-                            android:textColor="@color/lavender" />
+                            android:textAlignment="textStart"
+                            android:textColor="@color/lavender"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
 
                     </LinearLayout>
