@@ -38,6 +38,10 @@
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string name="phone_number">Phone Number</string>
     <string name="login">Login</string>
+    <string name="submit">Submit</string>
+    <string name="exit_story">Exit Story?</string>
+    <string name="verify">Verify</string>
+    <string name="verify_your_email">Verify Your Email!</string>
     <string-array name="spinner_items">
         <item>HV002-Daya Shree Boys</item>
         <item>DBH2</item>
