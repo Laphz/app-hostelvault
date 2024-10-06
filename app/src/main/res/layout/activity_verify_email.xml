@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:gravity="center"
+    android:background="@color/white"
     android:layout_height="match_parent"
     tools:context=".verifyEmailActivity">
 
@@ -26,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="@string/verify_your_email"
+                android:text="Verify Email"
                 android:textSize="30sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -34,7 +35,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.052" />
+                app:layout_constraintVertical_bias="0.052"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="250dp"
@@ -66,7 +68,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:background="@drawable/btn_bg"
-                    android:fontFamily="@font/poppins"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="@string/verify"
                     android:textColor="@color/white"
                     android:textSize="20sp">
