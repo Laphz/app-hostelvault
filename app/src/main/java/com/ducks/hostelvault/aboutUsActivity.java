@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class aboutUsActivity extends BaseActivity {
+public class aboutUsActivity extends AppCompatActivity {
     FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     @Override

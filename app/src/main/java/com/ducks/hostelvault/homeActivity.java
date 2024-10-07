@@ -18,7 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class homeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class homeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final float END_SCALE = 0.5f;
     ImageButton redirectToQr;
@@ -45,8 +45,6 @@ public class homeActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-
         redirectToQr = findViewById(R.id.redirectToQr);
         indicator = findViewById(R.id.indicator);
         status = findViewById(R.id.status);
@@ -56,6 +54,8 @@ public class homeActivity extends BaseActivity implements NavigationView.OnNavig
         contentView = findViewById(R.id.contentView);
         firebaseHelper = new FirebaseHelper();
         helperClass = new HelperClass();
+
+
 
         updateStatusUI();
 

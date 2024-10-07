@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class qrActivity extends BaseActivity {
+public class qrActivity extends AppCompatActivity {
 
     private CodeScanner scanner;
     private static final int CAMERA_REQUEST_CODE = 101;
@@ -118,7 +118,7 @@ public class qrActivity extends BaseActivity {
     }
 
     private void checkQrCode(String scannedValue, String hostelId, String userUid) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(ADMIN_DB_PATH);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(hostelId);
         ref.orderByValue().equalTo(scannedValue).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -137,7 +137,6 @@ public class qrActivity extends BaseActivity {
             }
         });
     }
-
     private void retrieveUserNameAndUpdateStatus(String userUid, String hostelId) {
         firebaseHelper.getUserName(userUid, userName -> {
             if (userName != null) {
@@ -150,7 +149,7 @@ public class qrActivity extends BaseActivity {
 
     // Method to update status in the database
     private void updateStatus(String userName, String userUid, String hostelId) {
-        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference(STATUS_DB_PATH + "/" + hostelId + "/" + userUid);
+        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference( hostelId + "/" +STATUS_DB_PATH + "/" + userUid);
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
         String formattedTimestamp = sdf.format(new Date());
 
@@ -162,6 +161,7 @@ public class qrActivity extends BaseActivity {
                     showReasonDialog(userName, userUid, statusRef, formattedTimestamp);
                 } else {
                     // User exists, delete their status entry
+//                    firebaseHelper.fetchAndStoreData(hostelId,userUid);
                     deleteUserNode(userUid, statusRef, userName);
                 }
             }
@@ -214,9 +214,7 @@ public class qrActivity extends BaseActivity {
         statusRef.removeValue().addOnCompleteListener(deleteTask -> {
             if (deleteTask.isSuccessful()) {
                 // Optionally, you can show a message after deletion
-                helperClass.customToast(qrActivity.this, "User: " + userName + "is now IN!");
-                // You can also choose to call the method to update the status or perform any other action here
-                // E.g., you can re-invoke showReasonDialog() or handle it however you need.
+                helperClass.customToast(qrActivity.this, "User: " + userName + " is now IN!");
             } else {
                 logError("Failed to delete status entry: " + deleteTask.getException());
                 helperClass.customToast(qrActivity.this, "Failed to delete status. Please try again.");
@@ -224,8 +222,6 @@ public class qrActivity extends BaseActivity {
         });
         helperClass.startFreshActivity(qrActivity.this,homeActivity.class);
     }
-
-
 
 
 

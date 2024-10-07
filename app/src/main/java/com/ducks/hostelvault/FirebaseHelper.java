@@ -1,7 +1,9 @@
 package com.ducks.hostelvault;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,20 +17,25 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Handler;
 
 public class FirebaseHelper {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private static final String TAG = "FirebaseHelper";
-    private String roomId, hostel_id;
+    private String roomId;
     private HelperClass helperClass = new HelperClass();
 
 
@@ -49,7 +56,7 @@ public class FirebaseHelper {
     }
 
     // Get the current user
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
         return firebaseAuth.getCurrentUser();
     }
 
@@ -138,8 +145,8 @@ public class FirebaseHelper {
     }
 
     // Store Hosteler data
-    public void storeHostelerData(String hostelerId, String name, String email, String mobile,String hostelId, String roomNum) {
-        checkHostelAndRoom(hostelerId,hostelId, roomNum, new RoomSizeCallback() {
+    public void storeHostelerData(String hostelerId, String name, String email, String mobile, String hostelId, String roomNum) {
+        checkHostelAndRoom(hostelerId, hostelId, roomNum, new RoomSizeCallback() {
             @Override
             public void onCallback(Integer roomSize) {
                 if (roomSize != null) {
@@ -147,7 +154,7 @@ public class FirebaseHelper {
                     Map<String, Object> hostelerData = new HashMap<>();
                     hostelerData.put("name", name);
                     hostelerData.put("email", email);
-                    hostelerData.put("mobile",mobile);
+                    hostelerData.put("mobile", mobile);
                     hostelerData.put("hostel_id", hostelId);
                     hostelerData.put("room_id", roomId);
 
@@ -166,7 +173,7 @@ public class FirebaseHelper {
     }
 
     // get user name toast
-    public void getUserNameToast(String userId, Context currentActivity){
+    public void getUserNameToast(String userId, Context currentActivity) {
         firestore.collection("hostelers").document(userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -187,7 +194,7 @@ public class FirebaseHelper {
     }
 
     // get userName
-    public void getUserName(String userId, final userNameCallback callback){
+    public void getUserName(String userId, final userNameCallback callback) {
         firestore.document("hostelers/" + userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -208,6 +215,7 @@ public class FirebaseHelper {
                     }
                 });
     }
+
     // Callback interface
     public interface userNameCallback {
         void onCallback(String userName);
@@ -261,7 +269,7 @@ public class FirebaseHelper {
             @Override
             public void onCallback(String hostelId) {
                 if (hostelId != null) {
-                    DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("logs/" + hostelId).child(userUid);
+                    DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference( hostelId + "/logs").child(userUid);
                     statusRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -313,5 +321,95 @@ public class FirebaseHelper {
     }
 
 
+    // Method to check if the user is authenticated
+    public void checkUserAuthentication(Context activity) {
+        FirebaseUser user = getCurrentUser();
+
+        if (user != null) {
+            // User is logged in
+            if (user.isEmailVerified()) {
+                // Redirect to home activity
+                helperClass.startFreshActivity(activity, homeActivity.class);
+            } else {
+                // Optionally handle unverified email
+                Log.d("FirebaseHelper", "Email not verified for user: " + user.getEmail());
+            }
+        } else {
+            // User not logged in, redirect to login activity
+            firebaseAuth.signOut();
+        }
+    }
+
+    // not working maa chuda rha bsdk 
+    public void checkUserState(Context currentActivity) {
+        firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    Intent intent = new Intent(currentActivity, launchActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    currentActivity.startActivity(intent);
+                    if (currentActivity instanceof Activity) {
+                        ((Activity) currentActivity).finish();
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void fetchAndStoreData(String hostelId, String userUid) {
+        // Initialize Firebase references
+        DatabaseReference realtimeRef = FirebaseDatabase.getInstance().getReference(hostelId + "logs" + "/" + userUid);
+        CollectionReference firestoreRef = FirebaseFirestore.getInstance().collection("hostels/" + hostelId + "/" + userUid);
+
+        // Fetch data from Realtime Database
+        realtimeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Retrieve the data as a Map
+                    Map<String, Object> data = (Map<String, Object>) snapshot.getValue();
+
+                    if (data != null) {
+                        // Add the data to Firestore
+                        firestoreRef.add(data)
+                                .addOnSuccessListener(documentReference -> {
+                                    Log.d("FirebaseHelper", "Data successfully stored in Firestore with ID: " + documentReference.getId());
+
+                                    // Remove the data from Realtime Database after successful transfer
+                                    realtimeRef.removeValue().addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Log.d("FirebaseHelper", "Data removed from Realtime Database successfully.");
+                                        } else {
+                                            Log.e("FirebaseHelper", "Failed to remove data from Realtime Database", task.getException());
+                                        }
+                                    });
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("FirebaseHelper", "Error adding data to Firestore", e);
+                                });
+                    } else {
+                        Log.e("FirebaseHelper", "No data found in Realtime Database at path: " + "logs/" + hostelId + "/" + userUid);
+                    }
+                } else {
+                    Log.d("FirebaseHelper", "No entry exists at the given path in Realtime Database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e("FirebaseHelper", "Error fetching data from Realtime Database", error.toException());
+            }
+        });
+    }
+
+
 }
+
+
+
+
+
 
