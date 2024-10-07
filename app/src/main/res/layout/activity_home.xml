@@ -38,10 +38,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="80dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/boarder"
-                app:cardBackgroundColor="#3F51B5"
+                app:cardBackgroundColor="#40242333"
                 app:cardCornerRadius="15dp"
-                app:cardElevation="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +76,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginStart="20dp"
+                            android:src="@drawable/baseline_check_circle_outline_green"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -85,12 +84,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:layout_marginTop="6dp"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:text="You are In!!"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/poppins"
                             android:textAlignment="textStart"
-                            android:textColor="@color/lavender"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/white"
+                            android:textSize="20sp"/>
 
 
                     </LinearLayout>
@@ -103,7 +102,7 @@
                 android:id="@+id/menu_icon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/baseline_dehaze_24"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,3 +127,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>
+

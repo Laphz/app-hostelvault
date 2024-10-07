@@ -4,7 +4,7 @@
     <!-- Background color of the CardView -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/card_color" /> <!-- Solid color of the card -->
+            <solid android:color="#80242333" /> <!-- Solid color of the card -->
         </shape>
     </item>
 
