@@ -223,7 +223,6 @@
                 android:fontFamily="@font/poppins"
                 android:text="@string/forgot_password"
                 android:textColor="@color/blue"
-                android:textFontWeight="500"
                 android:textScaleX="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
