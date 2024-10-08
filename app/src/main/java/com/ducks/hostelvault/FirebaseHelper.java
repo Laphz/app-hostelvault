@@ -25,8 +25,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Handler;
 
@@ -359,40 +364,53 @@ public class FirebaseHelper {
     }
 
 
-    public void fetchAndStoreData(String hostelId, String userUid) {
+    public void fetchAndStoreData(String hostelId, String userUid, String defaultWhere, String defaultCheckIn, String defaultCheckOut) {
+        // Fetch current date in correct format
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
+        String currentDate = sdf.format(date);
+
         // Initialize Firebase references
-        DatabaseReference realtimeRef = FirebaseDatabase.getInstance().getReference(hostelId + "logs" + "/" + userUid);
-        CollectionReference firestoreRef = FirebaseFirestore.getInstance().collection("hostels/" + hostelId + "/" + userUid);
+        DatabaseReference realtimeRef = FirebaseDatabase.getInstance().getReference(hostelId + "/logs/" + userUid);
+        CollectionReference recordsRef = FirebaseFirestore.getInstance().collection("hostels/" + hostelId + "/records");
 
         // Fetch data from Realtime Database
         realtimeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // Retrieve the data as a Map
-                    Map<String, Object> data = (Map<String, Object>) snapshot.getValue();
+                    // Extract data from the Realtime Database
+                    String fetchedWhere = snapshot.child("where").getValue(String.class);
+                    String fetchedCheckOut = snapshot.child("check_out").getValue(String.class);
 
-                    if (data != null) {
-                        // Add the data to Firestore
-                        firestoreRef.add(data)
-                                .addOnSuccessListener(documentReference -> {
-                                    Log.d("FirebaseHelper", "Data successfully stored in Firestore with ID: " + documentReference.getId());
+                    // Use provided defaults if values are missing
+                    String where = fetchedWhere != null ? fetchedWhere : defaultWhere;
+                    String checkOut = fetchedCheckOut != null ? fetchedCheckOut : defaultCheckOut;
 
-                                    // Remove the data from Realtime Database after successful transfer
-                                    realtimeRef.removeValue().addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            Log.d("FirebaseHelper", "Data removed from Realtime Database successfully.");
-                                        } else {
-                                            Log.e("FirebaseHelper", "Failed to remove data from Realtime Database", task.getException());
-                                        }
-                                    });
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e("FirebaseHelper", "Error adding data to Firestore", e);
-                                });
-                    } else {
-                        Log.e("FirebaseHelper", "No data found in Realtime Database at path: " + "logs/" + hostelId + "/" + userUid);
-                    }
+                    // Create a Map for the record entry
+                    Map<String, Object> recordData = new HashMap<>();
+                    recordData.put("userUid", userUid);
+                    recordData.put("where", where);
+                    recordData.put("check_in", defaultCheckIn);  // Provided by method
+                    recordData.put("check_out", checkOut);
+
+                    // Add the record to Firestore under the current date
+                    recordsRef.document(currentDate)
+                            .set(recordData, SetOptions.merge())  // Merges with existing data
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("FirebaseHelper", "Data successfully stored in Firestore for date: " + currentDate);
+
+                                // Call updateRecord, assuming record number needs to be passed
+                                int recordNumber = (int) snapshot.getChildrenCount(); // Example way to get record number, you can modify this
+                                Map<String, Object> updatedData = new HashMap<>();
+                                updatedData.put("status", "updated");
+
+                                // Call the updateRecord method
+                                updateRecord(hostelId, currentDate, recordNumber, updatedData);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("FirebaseHelper", "Error adding data to Firestore", e);
+                            });
                 } else {
                     Log.d("FirebaseHelper", "No entry exists at the given path in Realtime Database.");
                 }
@@ -405,6 +423,29 @@ public class FirebaseHelper {
         });
     }
 
+    public void updateRecord(String hostelId, String currentDate, long recordNumber, Map<String, Object> updatedData) {
+        // Initialize Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a reference to the specific document you want to update
+        DocumentReference docRef = db.collection("hostels")
+                .document(hostelId)
+                .collection("records")
+                .document(currentDate)
+                .collection("entries")
+                .document(String.valueOf(recordNumber));
+
+        // Update the document with the new data
+        docRef.update(updatedData)
+                .addOnSuccessListener(aVoid -> {
+                    // Document successfully updated
+                    Log.d("FirebaseHelper", "Document updated successfully.");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the error
+                    Log.e("FirebaseHelper", "Error updating document: " + e.getMessage());
+                });
+    }
 
 }
 

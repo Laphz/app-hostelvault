@@ -161,7 +161,7 @@ public class qrActivity extends AppCompatActivity {
                     showReasonDialog(userName, userUid, statusRef, formattedTimestamp);
                 } else {
                     // User exists, delete their status entry
-//                    firebaseHelper.fetchAndStoreData(hostelId,userUid);
+                    firebaseHelper.fetchAndStoreData(hostelId,userUid,null,null,null);
                     deleteUserNode(userUid, statusRef, userName);
                 }
             }
@@ -185,7 +185,7 @@ public class qrActivity extends AppCompatActivity {
                 // Prepare data to update in the database
                 Map<String, Object> updateData = new HashMap<>();
                 updateData.put("where", reasonText); // Update the status
-                updateData.put("timestamp", formattedTimestamp); // Add formatted timestamp
+                updateData.put("check_out", formattedTimestamp); // Add formatted timestamp
 
                 // Update the status in the database
                 updateStatusInDatabase(statusRef, userName, updateData);
