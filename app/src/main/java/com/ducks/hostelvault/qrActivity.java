@@ -161,8 +161,8 @@ public class qrActivity extends AppCompatActivity {
                     showReasonDialog(userName, userUid, statusRef, formattedTimestamp);
                 } else {
                     // User exists, delete their status entry
-                    firebaseHelper.fetchAndStoreData(hostelId,userUid,null,null,null);
-                    deleteUserNode(userUid, statusRef, userName);
+                    firebaseHelper.fetchAndStoreData(hostelId,userUid,null,formattedTimestamp,null, statusRef, userName,qrActivity.this);
+
                 }
             }
         });
@@ -209,19 +209,7 @@ public class qrActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteUserNode(String userUid, DatabaseReference statusRef, String userName) {
-        // Delete the user's status entry from the database
-        statusRef.removeValue().addOnCompleteListener(deleteTask -> {
-            if (deleteTask.isSuccessful()) {
-                // Optionally, you can show a message after deletion
-                helperClass.customToast(qrActivity.this, "User: " + userName + " is now IN!");
-            } else {
-                logError("Failed to delete status entry: " + deleteTask.getException());
-                helperClass.customToast(qrActivity.this, "Failed to delete status. Please try again.");
-            }
-        });
-        helperClass.startFreshActivity(qrActivity.this,homeActivity.class);
-    }
+
 
 
 
