@@ -18,8 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/poppins"
-        android:text="Hostel Vault"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Nivaas"
         android:textColor="@color/white"
         android:textSize="20sp">
 
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="hostelvault@gmail.com"
+        android:text="nivaas@gmail.com"
         android:textColor="@color/white"
         android:textSize="14sp">
 
