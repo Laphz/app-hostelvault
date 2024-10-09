@@ -23,7 +23,6 @@ public class launchActivity extends AppCompatActivity {
         super.attachBaseContext(context);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +31,7 @@ public class launchActivity extends AppCompatActivity {
         // Initialize helper classes
         firebaseHelper = new FirebaseHelper();
         helperClass = new HelperClass();
+
         // Finding views
         launchLogin = findViewById(R.id.launchLogin);
         launchRegister = findViewById(R.id.launchRegister);
@@ -58,6 +58,7 @@ public class launchActivity extends AppCompatActivity {
             }
         });
     }
+
     // Check if user is logged in and redirect to home activity
     @Override
     protected void onStart() {

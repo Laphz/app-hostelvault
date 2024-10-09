@@ -1,5 +1,6 @@
 package com.ducks.hostelvault;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -15,12 +16,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class FirebaseHelper {
@@ -28,7 +35,7 @@ public class FirebaseHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private static final String TAG = "FirebaseHelper";
-    private String roomId, hostel_id;
+    private String roomId;
     private HelperClass helperClass = new HelperClass();
 
 
@@ -49,7 +56,7 @@ public class FirebaseHelper {
     }
 
     // Get the current user
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
         return firebaseAuth.getCurrentUser();
     }
 
@@ -138,8 +145,8 @@ public class FirebaseHelper {
     }
 
     // Store Hosteler data
-    public void storeHostelerData(String hostelerId, String name, String email, String mobile,String hostelId, String roomNum) {
-        checkHostelAndRoom(hostelerId,hostelId, roomNum, new RoomSizeCallback() {
+    public void storeHostelerData(String hostelerId, String name, String email, String mobile, String hostelId, String roomNum) {
+        checkHostelAndRoom(hostelerId, hostelId, roomNum, new RoomSizeCallback() {
             @Override
             public void onCallback(Integer roomSize) {
                 if (roomSize != null) {
@@ -147,7 +154,7 @@ public class FirebaseHelper {
                     Map<String, Object> hostelerData = new HashMap<>();
                     hostelerData.put("name", name);
                     hostelerData.put("email", email);
-                    hostelerData.put("mobile",mobile);
+                    hostelerData.put("mobile", mobile);
                     hostelerData.put("hostel_id", hostelId);
                     hostelerData.put("room_id", roomId);
 
@@ -166,7 +173,7 @@ public class FirebaseHelper {
     }
 
     // get user name toast
-    public void getUserNameToast(String userId, Context currentActivity){
+    public void getUserNameToast(String userId, Context currentActivity) {
         firestore.collection("hostelers").document(userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -187,7 +194,7 @@ public class FirebaseHelper {
     }
 
     // get userName
-    public void getUserName(String userId, final userNameCallback callback){
+    public void getUserName(String userId, final userNameCallback callback) {
         firestore.document("hostelers/" + userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -208,6 +215,7 @@ public class FirebaseHelper {
                     }
                 });
     }
+
     // Callback interface
     public interface userNameCallback {
         void onCallback(String userName);
@@ -261,7 +269,7 @@ public class FirebaseHelper {
             @Override
             public void onCallback(String hostelId) {
                 if (hostelId != null) {
-                    DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference("logs/" + hostelId).child(userUid);
+                    DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference(hostelId + "/logs").child(userUid);
                     statusRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -313,5 +321,171 @@ public class FirebaseHelper {
     }
 
 
-}
+    // Method to check if the user is authenticated
+    public void checkUserAuthentication(Context activity) {
+        FirebaseUser user = getCurrentUser();
 
+        if (user != null) {
+            // User is logged in
+            if (user.isEmailVerified()) {
+                // Redirect to home activity
+                helperClass.startFreshActivity(activity, homeActivity.class);
+            } else {
+                // Optionally handle unverified email
+                Log.d("FirebaseHelper", "Email not verified for user: " + user.getEmail());
+            }
+        } else {
+            // User not logged in, redirect to login activity
+            firebaseAuth.signOut();
+        }
+    }
+
+    // not working maa chuda rha bsdk
+    public void checkUserState(Context currentActivity) {
+        firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    Intent intent = new Intent(currentActivity, launchActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    currentActivity.startActivity(intent);
+                    if (currentActivity instanceof Activity) {
+                        ((Activity) currentActivity).finish();
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void fetchAndStoreData(String hostelId, String userUid, String defaultWhere, String defaultCheckIn, String defaultCheckOut, DatabaseReference statusRef, String userName, Context context) {
+        // Fetch current date in correct format
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
+        String currentDate = sdf.format(date);
+
+        // Initialize Firebase references
+        DatabaseReference realtimeRef = FirebaseDatabase.getInstance().getReference(hostelId + "/logs/" + userUid);
+
+        realtimeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Extract data from the Realtime Database
+                    String fetchedWhere = snapshot.child("where").getValue(String.class);
+                    String fetchedCheckOut = snapshot.child("check_out").getValue(String.class);
+
+                    // Use provided defaults if values are missing
+                    String where = fetchedWhere != null ? fetchedWhere : defaultWhere;
+                    String checkOut = fetchedCheckOut != null ? fetchedCheckOut : defaultCheckOut;
+
+                    // Create record data map
+                    Map<String, Object> recordData = createRecordData(userUid, where, defaultCheckIn, checkOut,statusRef, userName,context);
+
+                    // Store record in Firestore with the desired structure
+                    storeRecordInFirestore(userUid,hostelId, currentDate, recordData, snapshot,statusRef, userName,context);
+                } else {
+                    Log.d("FirebaseHelper", "No entry exists at the given path in Realtime Database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e("FirebaseHelper", "Error fetching data from Realtime Database", error.toException());
+            }
+        });
+    }
+
+    private Map<String, Object> createRecordData(String userUid, String where, String checkIn, String checkOut,DatabaseReference statusRef, String userName,Context context) {
+        Map<String, Object> recordData = new HashMap<>();
+        Map<String, Object> currentFieldNo = new HashMap<>();
+
+        // Add fields to the currentFieldNo map
+        currentFieldNo.put("userUid", userUid);
+        currentFieldNo.put("where", where);
+        currentFieldNo.put("check_in", checkIn);
+        currentFieldNo.put("check_out", checkOut);
+
+        // Use the fieldNo as the key and store the currentFieldNo map under it
+        recordData.put(String.valueOf(recordData.size() + 1), currentFieldNo);
+
+        return recordData;
+    }
+
+
+    private void storeRecordInFirestore(String userUid, String hostelId, String currentDate, Map<String, Object> recordData, DataSnapshot snapshot,DatabaseReference statusRef, String userName,Context context) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Reference to the document for the current date
+        DocumentReference recordsForDateRef = db.collection("hostels")
+                .document(hostelId)
+                .collection("records")
+                .document(currentDate);
+
+        // Fetch the existing data for this date
+        recordsForDateRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                // Document exists, retrieve the existing data
+                Map<String, Object> existingData = task.getResult().getData();
+
+                // Find the next available number (1, 2, 3, etc.)
+                int nextRecordNumber = existingData.size() + 1;
+
+                // Add the new data under the next available number
+                existingData.put(String.valueOf(nextRecordNumber), recordData.get("1")); // recordData has one entry with key "1"
+
+                // Update the document with the new entry
+                recordsForDateRef.update(existingData)
+                        .addOnSuccessListener(aVoid -> Log.d("FirebaseHelper", "Data successfully updated for the date: " + currentDate))
+                        .addOnFailureListener(e -> Log.e("FirebaseHelper", "Error updating data in Firestore", e));
+            } else {
+                // Document doesn't exist, set the new data
+                recordsForDateRef.set(recordData)
+                        .addOnSuccessListener(aVoid -> Log.d("FirebaseHelper", "Data successfully added to the records for date: " + currentDate))
+                        .addOnFailureListener(e -> Log.e("FirebaseHelper", "Error adding data to Firestore", e));
+            }
+        }).addOnFailureListener(e -> Log.e("FirebaseHelper", "Error fetching Firestore document", e));
+
+        deleteUserNode(userUid, statusRef, userName,context);
+
+    }
+
+
+    // Update the updateRecord method to match the new structure
+    public void updateRecord(String hostelId, String currentDate, String recordId, Map<String, Object> updatedData) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("hostels")
+                .document(hostelId)
+                .collection("records")
+                .document(currentDate)
+                .collection("entries")
+                .document(recordId); // Use the recordId obtained from addOnSuccessListener
+
+        docRef.update(updatedData)
+                .addOnSuccessListener(aVoid -> Log.d("FirebaseHelper", "Document updated successfully."))
+                .addOnFailureListener(e -> Log.e("FirebaseHelper", "Error updating document: " + e.getMessage()));
+    }
+
+    // Delete the user's status entry from the database
+    private void deleteUserNode(String userUid, DatabaseReference statusRef, String userName, Context context) {
+        statusRef.removeValue().addOnCompleteListener(deleteTask -> {
+            if (deleteTask.isSuccessful()) {
+                // Optionally, you can show a message after deletion
+                helperClass.customToast(context, "User: " + userName + " is now IN!");
+            } else {
+                logError("Failed to delete status entry: " + deleteTask.getException());
+                helperClass.customToast(context, "Failed to delete status. Please try again.");
+            }
+        });
+        helperClass.startFreshActivity(context,homeActivity.class);
+    }
+
+    // Log error and show message
+    private void logError(String message) {
+        Log.e("QRScanner", message);
+    }
+
+
+}

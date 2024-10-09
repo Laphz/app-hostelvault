@@ -5,10 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -40,7 +43,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class qrActivity extends BaseActivity {
+public class qrActivity extends AppCompatActivity {
 
     private CodeScanner scanner;
     private static final int CAMERA_REQUEST_CODE = 101;
@@ -118,7 +121,7 @@ public class qrActivity extends BaseActivity {
     }
 
     private void checkQrCode(String scannedValue, String hostelId, String userUid) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(ADMIN_DB_PATH);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(hostelId);
         ref.orderByValue().equalTo(scannedValue).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -137,7 +140,6 @@ public class qrActivity extends BaseActivity {
             }
         });
     }
-
     private void retrieveUserNameAndUpdateStatus(String userUid, String hostelId) {
         firebaseHelper.getUserName(userUid, userName -> {
             if (userName != null) {
@@ -150,7 +152,7 @@ public class qrActivity extends BaseActivity {
 
     // Method to update status in the database
     private void updateStatus(String userName, String userUid, String hostelId) {
-        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference(STATUS_DB_PATH + "/" + hostelId + "/" + userUid);
+        DatabaseReference statusRef = FirebaseDatabase.getInstance().getReference( hostelId + "/" +STATUS_DB_PATH + "/" + userUid);
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
         String formattedTimestamp = sdf.format(new Date());
 
@@ -162,7 +164,8 @@ public class qrActivity extends BaseActivity {
                     showReasonDialog(userName, userUid, statusRef, formattedTimestamp);
                 } else {
                     // User exists, delete their status entry
-                    deleteUserNode(userUid, statusRef, userName);
+                    firebaseHelper.fetchAndStoreData(hostelId,userUid,null,formattedTimestamp,null, statusRef, userName,qrActivity.this);
+
                 }
             }
         });
@@ -171,6 +174,8 @@ public class qrActivity extends BaseActivity {
     private void showReasonDialog(String userName, String userUid, DatabaseReference statusRef, String formattedTimestamp) {
         Dialog dialog = new Dialog(qrActivity.this);
         dialog.setContentView(R.layout.reason_dialog);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
 
         EditText reason = dialog.findViewById(R.id.reason);
@@ -185,7 +190,7 @@ public class qrActivity extends BaseActivity {
                 // Prepare data to update in the database
                 Map<String, Object> updateData = new HashMap<>();
                 updateData.put("where", reasonText); // Update the status
-                updateData.put("timestamp", formattedTimestamp); // Add formatted timestamp
+                updateData.put("check_out", formattedTimestamp); // Add formatted timestamp
 
                 // Update the status in the database
                 updateStatusInDatabase(statusRef, userName, updateData);
@@ -207,22 +212,6 @@ public class qrActivity extends BaseActivity {
                 helperClass.customToast(qrActivity.this, "Failed to change status. Please try again.");
             }
         });
-    }
-
-    private void deleteUserNode(String userUid, DatabaseReference statusRef, String userName) {
-        // Delete the user's status entry from the database
-        statusRef.removeValue().addOnCompleteListener(deleteTask -> {
-            if (deleteTask.isSuccessful()) {
-                // Optionally, you can show a message after deletion
-                helperClass.customToast(qrActivity.this, "User: " + userName + "is now IN!");
-                // You can also choose to call the method to update the status or perform any other action here
-                // E.g., you can re-invoke showReasonDialog() or handle it however you need.
-            } else {
-                logError("Failed to delete status entry: " + deleteTask.getException());
-                helperClass.customToast(qrActivity.this, "Failed to delete status. Please try again.");
-            }
-        });
-        helperClass.startFreshActivity(qrActivity.this,homeActivity.class);
     }
 
 
