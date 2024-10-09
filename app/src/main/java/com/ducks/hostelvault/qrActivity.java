@@ -5,10 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -171,6 +174,8 @@ public class qrActivity extends AppCompatActivity {
     private void showReasonDialog(String userName, String userUid, DatabaseReference statusRef, String formattedTimestamp) {
         Dialog dialog = new Dialog(qrActivity.this);
         dialog.setContentView(R.layout.reason_dialog);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
 
         EditText reason = dialog.findViewById(R.id.reason);
