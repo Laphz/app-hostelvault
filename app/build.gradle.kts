@@ -27,9 +27,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11 }
 }
 
 dependencies {
@@ -47,6 +46,6 @@ dependencies {
     implementation(libs.code.scanner)
     implementation(libs.circleimageview)
     implementation(libs.expandabletextview)
-//    implementation(libs.library)
+    implementation (libs.library)
 
 }
